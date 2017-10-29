@@ -1,0 +1,42 @@
+# Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+
+feather_bfin.name=Feather Blackfin
+feather_bfin.vid.0=0x239A
+feather_bfin.pid.0=0x8013
+feather_bfin.vid.1=0x239A
+feather_bfin.pid.1=0x0013
+feather_bfin.upload.tool=bossac
+feather_bfin.upload.protocol=sam-ba
+feather_bfin.upload.maximum_size=69632
+feather_bfin.upload.use_1200bps_touch=false
+feather_bfin.upload.wait_for_upload_port=false
+feather_bfin.upload.native_usb=true
+feather_bfin.build.mcu=bf706
+feather_bfin.build.f_cpu=48000000L
+feather_bfin.build.usb_product="Feather Blackfin"
+feather_bfin.build.usb_manufacturer="Adafruit"
+feather_bfin.build.board=FEATHER_BFIN
+feather_bfin.build.core=arduino
+feather_bfin.build.extra_flags=-DARDUINO_BFIN -D__ADSPBF706__
+feather_bfin.build.ldscript=linker_scripts/gcc/link-bf706.ld
+feather_bfin.build.openocdscript=openocd_scripts/arduino_zero.cfg
+feather_bfin.build.variant=feather_bfin
+feather_bfin.build.variant_system_lib=
+feather_bfin.build.vid=0x239A
+feather_bfin.build.pid=0x8013
+
