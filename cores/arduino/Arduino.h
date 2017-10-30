@@ -41,9 +41,10 @@ extern "C"{
 
 #include "bf706_device.h"
 
-/*
+
 #include "wiring_constants.h"
 
+/*
 #define clockCyclesPerMicrosecond() ( SystemCoreClock / 1000000L )
 #define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (SystemCoreClock / 1000L) )
 #define microsecondsToClockCycles(a) ( (a) * (SystemCoreClock / 1000000L) )
@@ -53,14 +54,14 @@ void yield( void ) ;
 
 /* system functions */
 int main( void );
-void init( void );
+void __init( void );
 
 /* sketch */
 void setup( void ) ;
 void loop( void ) ;
 
 
-//#include "WVariant.h"
+#include "WVariant.h"
 
 #ifdef __cplusplus
 } // extern "C"
@@ -80,16 +81,16 @@ void loop( void ) ;
 #ifdef __cplusplus
   #include "Uart.h"
 #endif
+*/
 
 // Include board variant
 #include "variant.h"
 
 #include "wiring.h"
 #include "wiring_digital.h"
-#include "wiring_analog.h"
-#include "wiring_shift.h"
-#include "WInterrupts.h"
-*/
+//#include "wiring_analog.h"
+//#include "wiring_shift.h"
+//#include "WInterrupts.h"
 
 // undefine stdlib's abs if encountered
 #ifdef abs

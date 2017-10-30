@@ -25,11 +25,11 @@
 // - calls _exit (which calls monexit to dump accumulated prof data (PROFCRT))
 // - defines dummy IO routines (!FIOCRT)
 
-//#include <bf706_device.h>
+#include <bf706_device.h>
 #include <sys/anomaly_macros_rtl.h>
 
-#define EVT2h (0x1FC02008 >> 16)
-#define EVT2l (0x1FC02008 & 0xFFFF)
+#define EVT2h (REG_ICU_EVT2 >> 16)
+#define EVT2l (REG_ICU_EVT2 & 0xFFFF)
 #define UNASSIGNED_VAL 0
 #define UNASSIGNED_FILL 0
 // just IVG15

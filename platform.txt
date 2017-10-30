@@ -37,7 +37,7 @@ compiler.c.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu11 -ffunc
 compiler.c.elf.cmd=bfin-elf-gcc
 compiler.c.elf.flags=
 compiler.S.cmd=bfin-elf-gcc
-compiler.S.flags=-c -g -x assembler-with-cpp -mcpu={build.mcu} -MMD
+compiler.S.flags=-c -g -x assembler-with-cpp -mcpu={build.mcu} -MMD -D__ASSEMBLY__
 compiler.cpp.cmd=bfin-elf-g++
 compiler.cpp.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu++11 -nostdlib --param max-inline-insns-single=500 -MMD
 compiler.ar.cmd=bfin-elf-ar
@@ -75,7 +75,7 @@ recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -DF_CPU=
 recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {compiler.bfin.cmsis.c.flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Compile S files
-recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {compiler.bfin.cmsis.c.flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Create archives
 # archive_file_path is needed for backwards compatibility with IDE 1.6.5 or older, IDE 1.6.6 or newer overrides this value

@@ -16,35 +16,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
-#include "Arduino.h"
+#pragma once
 
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-void initVariant() { }
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-// Initialize C library
-extern "C" void __libc_init_array(void);
+extern void __init(void);
 
-/*
- * \brief Main entry point of Arduino application
- */
-int main( void )
-{
-  //note that __init gets called from the assembly startup
-
-  __libc_init_array();
-
-  initVariant();
-
-  setup();
-
-  for (;;)
-  {
-    loop();
-    //if (serialEventRun) serialEventRun();
-  }
-
-  return 0;
+#ifdef __cplusplus
 }
+#endif

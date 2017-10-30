@@ -16,35 +16,23 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
 #include "Arduino.h"
 
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-void initVariant() { }
-
-// Initialize C library
-extern "C" void __libc_init_array(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
- * \brief Main entry point of Arduino application
+ * System Core Clock is at 48mhz at reset (I think)
  */
-int main( void )
+uint32_t SystemCoreClock=48000000ul ;
+
+void __init( void )
 {
-  //note that __init gets called from the assembly startup
-
-  __libc_init_array();
-
-  initVariant();
-
-  setup();
-
-  for (;;)
-  {
-    loop();
-    //if (serialEventRun) serialEventRun();
-  }
-
-  return 0;
+  //TODO: init stuff, set clocks
+  asm("NOP;");
 }
+
+#ifdef __cplusplus
+}
+#endif
