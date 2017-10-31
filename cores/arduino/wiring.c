@@ -29,8 +29,12 @@ uint32_t SystemCoreClock=48000000ul ;
 
 void __init( void )
 {
-  //TODO: init stuff, set clocks
-  asm("NOP;");
+  //SEC_Global->SEC0_GCTL.bit.RESET = 1;
+  //SCI->SEC0_CCTL0.bit.RESET = 1;
+
+  //enable interrupts
+  SEC_Global->SEC0_GCTL.bit.EN = 1;
+  SCI->SEC0_CCTL0.bit.EN = 1;
 }
 
 #ifdef __cplusplus

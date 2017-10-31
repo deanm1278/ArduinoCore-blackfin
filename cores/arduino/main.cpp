@@ -34,7 +34,7 @@ extern "C" void __cxa_pure_virtual() { while (1); }
  */
 int main( void )
 {
-  //note that __init gets called from the assembly startup
+  __init();
 
   __libc_init_array();
 
