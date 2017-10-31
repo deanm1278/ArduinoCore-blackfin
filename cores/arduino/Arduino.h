@@ -67,21 +67,19 @@ void loop( void ) ;
 } // extern "C"
 #endif
 
-/*
 // The following headers are for C++ only compilation
 #ifdef __cplusplus
   #include "WCharacter.h"
   #include "WString.h"
-  #include "Tone.h"
-  #include "WMath.h"
+  //#include "Tone.h"
+  //#include "WMath.h"
   #include "HardwareSerial.h"
-  #include "pulse.h"
+  //#include "pulse.h"
 #endif
 #include "delay.h"
 #ifdef __cplusplus
-  #include "Uart.h"
+  //#include "Uart.h"
 #endif
-*/
 
 // Include board variant
 #include "variant.h"

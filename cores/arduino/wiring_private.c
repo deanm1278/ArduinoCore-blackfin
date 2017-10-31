@@ -16,37 +16,27 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
 #include "Arduino.h"
+#include "wiring_private.h"
 
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-void initVariant() { }
-
-// Initialize C library
-extern "C" void __libc_init_array(void);
-
-extern "C" void __cxa_pure_virtual() { while (1); }
-
-/*
- * \brief Main entry point of Arduino application
- */
-int main( void )
+int pinPeripheral( uint32_t ulPin, EPioType ulPeripheral )
 {
-  //note that __init gets called from the assembly startup
-
-  __libc_init_array();
-
-  initVariant();
-
-  setup();
-
-  for (;;)
+  // Handle the case the pin isn't usable as PIO
+  if ( g_APinDescription[ulPin].ulPinType == PIO_NOT_A_PIN )
   {
-    loop();
-    if (serialEventRun) serialEventRun();
+    return -1 ;
   }
 
-  return 0;
+  EPortType port = g_APinDescription[ulPin].ulPort;
+  uint32_t pin = g_APinDescription[ulPin].ulPin;
+  Portgroup *pg = (Portgroup *)g_APorts[port];
+
+  //enable peripheral mode
+  pg->FER_SET.reg |= (1ul << pin);
+
+  //set mux
+  pg->MUX.reg |= (ulPeripheral << (pin * 2));
+
+  return 0l ;
 }
+

@@ -16,37 +16,25 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
-#include "Arduino.h"
+#pragma once
 
-// Weak empty variant initialization function.
-// May be redefined by variant files.
-void initVariant() __attribute__((weak));
-void initVariant() { }
+#include <stdint.h>
+#include <stdio.h>
+#include <stdarg.h>
 
-// Initialize C library
-extern "C" void __libc_init_array(void);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-extern "C" void __cxa_pure_virtual() { while (1); }
+#include "bf706_device.h"
 
-/*
- * \brief Main entry point of Arduino application
- */
-int main( void )
-{
-  //note that __init gets called from the assembly startup
+#include "wiring_constants.h"
 
-  __libc_init_array();
+int pinPeripheral( uint32_t ulPin, EPioType ulPeripheral );
 
-  initVariant();
+#ifdef __cplusplus
+} // extern "C"
 
-  setup();
+#include "HardwareSerial.h"
 
-  for (;;)
-  {
-    loop();
-    if (serialEventRun) serialEventRun();
-  }
-
-  return 0;
-}
+#endif

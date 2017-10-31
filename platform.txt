@@ -33,13 +33,13 @@ compiler.warning_flags.all=-Wall -Wextra
 
 compiler.path=C:\cygwin64\bfin-gnu-new\buildscript\bfin-elf-win\bin\
 compiler.c.cmd=bfin-elf-gcc
-compiler.c.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -MMD
+compiler.c.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu11 -Os -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -MMD
 compiler.c.elf.cmd=bfin-elf-gcc
 compiler.c.elf.flags=
 compiler.S.cmd=bfin-elf-gcc
 compiler.S.flags=-c -g -x assembler-with-cpp -mcpu={build.mcu} -MMD -D__ASSEMBLY__
 compiler.cpp.cmd=bfin-elf-g++
-compiler.cpp.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu++11 -nostdlib --param max-inline-insns-single=500 -MMD
+compiler.cpp.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu++11 -fno-rtti -nostdlib -Os --param max-inline-insns-single=500 -MMD
 compiler.ar.cmd=bfin-elf-ar
 compiler.ar.flags=rcs
 compiler.objcopy.cmd=bfin-elf-objcopy
