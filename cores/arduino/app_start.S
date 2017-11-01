@@ -79,9 +79,10 @@ L$ivt:	[P0++] = R1;
 	P1.L = L$supervisor_mode;
 	[P0] = P1;
 
-/*
-	//TODO: Set the handler for IVG11 to the dispatcher
-*/
+	//Set the handler for IVG11 to the dispatcher
+	R1.L = __sec_dispatch
+	R1.H = __sec_dispatch
+	[P0+(REG_ICU_EVT11-REG_ICU_EVT15)] = R1;  // write &sec_dispatch to EVT11.
 
 	// Initialise the stack.
 	// Note: this points just past the end of the section.
@@ -228,3 +229,59 @@ __unknown_exception_occurred:
 
 	.local	L$argv
 	.comm	L$argv,4,4
+
+//interrupt dispatcher
+	.align 2
+	.type __sec_dispatch, STT_FUNC;
+__sec_dispatch:
+	//save registers
+	DISPATCHER_PUSH;
+
+	P1.H = HI(REG_ICU_CEC_SID); 
+	P1.L = LO(REG_ICU_CEC_SID); 
+	R0 = [P1];                 // read CEC_SID (32-bit MMR)
+	P0 = R0;                   // copy SID to 1st handler arg
+	[P1] = R0;                 // interrupt acknowledgement
+
+/* TODO: these
+	LOADIMM32REG(P1, ___sys_int_mapping_table)
+	P1 = P1 + P0;              // &sys_int_mapping_table[SID]
+	R1 = B[P1](Z);             // R1 = sys_int_mapping_table[SID]
+	P0 = R1;                   // P0 = interrupt index
+
+	LOADIMM32REG(P1, _adi_dispatched_int_vector_table)
+*/
+
+	P0 = P0 + P0;              // multiply the index by 2
+	P1 = P1 + (P0 << 2);       // &_adi_dispatched_int_vector_table[index]
+
+	R2 = [P1 + 4];             // load callback parameter
+	P1 = [P1];                 // load address of handler 
+
+	// The called handler subroutine must save all registers onto the stack,
+	// except possibly those that weve already saved (R0-2,P0-2,ASTAT,RETS).
+	// However, by the time we return the stack itself may have been swapped,
+	// and so the actual register contents (although preserved somewhere) may
+	// not be the values that they had before the call. The exception to this
+	// is R0, which is required to be maintained even across a context switch,
+	// as the interrupt exit sequence requires it.
+
+	// R0 contains the IID (i.e. the interrupt idenfifier)
+	// R1 contains the interrupt index
+	// R2 contains the handler argument
+	CALL (P1);                 // call the handler, preserves R0
+
+	// Not we write the SID to SEC0_END to complete the interrupt cycle. This
+	// will re-enable system interrupts of *lower* priority than the one we 
+	// are leaving. However, interrupts are globally disabled here (via 
+	// IPEND[4]) so no further interrupts will be serviced until after the
+	// RTI executes.
+
+	P0.H = HI(REG_SEC_Global_SEC0_END);
+	P0.L = LO(REG_SEC_Global_SEC0_END);
+	[P0] = R0;           // R0 still contains the SID after the handler call
+
+	//restore registers
+	DISPATCHER_POP;
+
+	RTI;
