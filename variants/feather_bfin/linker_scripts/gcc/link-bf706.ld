@@ -45,6 +45,7 @@ SECTIONS
   .text           :
   {
     *(.text.prologue);
+    KEEP(*(.isr_vector))
     *(.text .text.* .l1.text .l1.text.*)
     KEEP (*(.text.*personality*))
     /* .gnu.warning sections are handled specially by elf32.em.  */

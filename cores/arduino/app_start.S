@@ -79,10 +79,12 @@ L$ivt:	[P0++] = R1;
 	P1.L = L$supervisor_mode;
 	[P0] = P1;
 
+
 	//Set the handler for IVG11 to the dispatcher
 	R1.L = __sec_dispatch
 	R1.H = __sec_dispatch
 	[P0+(REG_ICU_EVT11-REG_ICU_EVT15)] = R1;  // write &sec_dispatch to EVT11.
+
 
 	// Initialise the stack.
 	// Note: this points just past the end of the section.
@@ -243,19 +245,20 @@ __sec_dispatch:
 	P0 = R0;                   // copy SID to 1st handler arg
 	[P1] = R0;                 // interrupt acknowledgement
 
-/* TODO: these
-	LOADIMM32REG(P1, ___sys_int_mapping_table)
-	P1 = P1 + P0;              // &sys_int_mapping_table[SID]
+	.extern _exception_table;
+	.type _exception_table,STT_OBJECT;
+	P1.H = _exception_table;
+	P1.L = _exception_table;
+
 	R1 = B[P1](Z);             // R1 = sys_int_mapping_table[SID]
 	P0 = R1;                   // P0 = interrupt index
 
-	LOADIMM32REG(P1, _adi_dispatched_int_vector_table)
-*/
+	//LOADIMM32REG(P1, _adi_dispatched_int_vector_table)
 
-	P0 = P0 + P0;              // multiply the index by 2
+	//P0 = P0 + P0;              // multiply the index by 2
 	P1 = P1 + (P0 << 2);       // &_adi_dispatched_int_vector_table[index]
 
-	R2 = [P1 + 4];             // load callback parameter
+	//R2 = [P1 + 4];             // load callback parameter
 	P1 = [P1];                 // load address of handler 
 
 	// The called handler subroutine must save all registers onto the stack,
@@ -270,6 +273,14 @@ __sec_dispatch:
 	// R1 contains the interrupt index
 	// R2 contains the handler argument
 	CALL (P1);                 // call the handler, preserves R0
+
+/*
+	.extern _INT_HANDLER;
+    .type _INT_HANDLER,STT_FUNC;
+	CALL.X (_INT_HANDLER);
+*/
+
+
 
 	// Not we write the SID to SEC0_END to complete the interrupt cycle. This
 	// will re-enable system interrupts of *lower* priority than the one we 
