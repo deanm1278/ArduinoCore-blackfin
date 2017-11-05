@@ -28,8 +28,21 @@ const PinDescription g_APinDescription[]=
 
   //13 LED
   { EPORT_B, 4, PIO_MUX_0, (PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE },
+
+  //14..15 Serial USB
+  { EPORT_B, 8, PIO_MUX_0, (PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE }, // UART0_RX
+  { EPORT_B, 9, PIO_MUX_0, (PIN_ATTR_DIGITAL), No_ADC_Channel, NOT_ON_PWM, NOT_ON_TIMER, EXTERNAL_INT_NONE }, // UART0_TX
 };
 
 const Portgroup *g_APorts[NUM_PORT] = PORT_INSTS;
 
+Uart Serial( UART0, PIN_SERIAL_RX, PIN_SERIAL_TX ) ;
 Uart Serial1( UART1, PIN_SERIAL1_RX, PIN_SERIAL1_TX ) ;
+
+extern "C" {
+
+void UART1_STAT_Handler( void ){
+  Serial1.IrqHandler();
+}
+
+};

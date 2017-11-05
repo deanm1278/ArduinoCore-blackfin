@@ -249,16 +249,7 @@ __sec_dispatch:
 	.type _exception_table,STT_OBJECT;
 	P1.H = _exception_table;
 	P1.L = _exception_table;
-
-	R1 = B[P1](Z);             // R1 = sys_int_mapping_table[SID]
-	P0 = R1;                   // P0 = interrupt index
-
-	//LOADIMM32REG(P1, _adi_dispatched_int_vector_table)
-
-	//P0 = P0 + P0;              // multiply the index by 2
 	P1 = P1 + (P0 << 2);       // &_adi_dispatched_int_vector_table[index]
-
-	//R2 = [P1 + 4];             // load callback parameter
 	P1 = [P1];                 // load address of handler 
 
 	// The called handler subroutine must save all registers onto the stack,
@@ -279,8 +270,6 @@ __sec_dispatch:
     .type _INT_HANDLER,STT_FUNC;
 	CALL.X (_INT_HANDLER);
 */
-
-
 
 	// Not we write the SID to SEC0_END to complete the interrupt cycle. This
 	// will re-enable system interrupts of *lower* priority than the one we 

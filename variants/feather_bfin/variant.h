@@ -15,6 +15,10 @@
 
 #define NUM_PORT 3
 
+//Serial
+#define PIN_SERIAL_RX  		(14ul)
+#define PIN_SERIAL_TX  		(15ul)
+
 // Serial1
 #define PIN_SERIAL1_RX       (0ul)
 #define PIN_SERIAL1_TX       (1ul)
@@ -49,6 +53,7 @@ extern const Portgroup *g_APorts[];
 
 #ifdef __cplusplus
 
+extern Uart Serial;
 extern Uart Serial1;
 
 #endif

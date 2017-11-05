@@ -39,12 +39,12 @@ compiler.c.elf.flags=
 compiler.S.cmd=bfin-elf-gcc
 compiler.S.flags=-c -g -x assembler-with-cpp -mcpu={build.mcu} -MMD -D__ASSEMBLY__
 compiler.cpp.cmd=bfin-elf-g++
-compiler.cpp.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu++11 -fno-rtti -nostdlib -Os --param max-inline-insns-single=500 -MMD
+compiler.cpp.flags=-mcpu={build.mcu} -c {compiler.warning_flags} -std=gnu++11 -fno-rtti -ffunction-sections -fdata-sections -fno-threadsafe-statics -nostdlib -Os --param max-inline-insns-single=500 -MMD
 compiler.ar.cmd=bfin-elf-ar
 compiler.ar.flags=rcs
 compiler.objcopy.cmd=bfin-elf-objcopy
 compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
-compiler.ldflags=-mcpu={build.mcu}
+compiler.ldflags=-mcpu={build.mcu} -Wl,--cref
 compiler.size.cmd=bfin-elf-size
 compiler.define=-DARDUINO=
 compiler.readelf.cmd=bfin-elf-readelf
@@ -83,7 +83,7 @@ archive_file_path={build.path}/{archive_file}
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}"  "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-T{build.variant.path}/{build.ldscript}" --specs=nosys.specs {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" {object_files} "-L{build.variant.path}" -lm "{build.path}/{archive_file}"
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}"  "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-T{build.variant.path}/{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" --specs=nosys.specs {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" {object_files} "-L{build.variant.path}" -lm "{build.path}/{archive_file}"
 
 ## Create output (ldr file)
 recipe.objcopy.ldr.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.ldr.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.ldr" "{build.path}/{build.project_name}.elf"

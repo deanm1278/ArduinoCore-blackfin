@@ -18,6 +18,7 @@
 
 #define ARDUINO_MAIN
 #include "Arduino.h"
+#include "handlers.h"
 
 // Weak empty variant initialization function.
 // May be redefined by variant files.
@@ -49,15 +50,4 @@ int main( void )
   }
 
   return 0;
-}
-
-extern "C" {
-  void UART1_STAT_Handler( void ){
-    for(int j = 0; j < 5; j++){
-      digitalWrite(13, HIGH);   // turn the LED on (HIGH is the voltage level)
-      for(unsigned long i=0; i<10000000UL; i++) asm("NOP;");
-      digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW
-      for(unsigned long i=0; i<10000000UL; i++) asm("NOP;");
-    }
-  }
 }

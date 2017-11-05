@@ -38,6 +38,7 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   //8 bit word
   hw->CTL.bit.WLS = 0x03;
 
+  /* TODO: this once interrupts are working
   //enable rx interrupt
   //without DMA channels for now
   hw->IMSK_SET.bit.ELSI = 1;
@@ -56,6 +57,7 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   	//fail
   	while(1);
   }
+  */
 
   //enable
   hw->CTL.bit.EN = 1;
@@ -73,8 +75,8 @@ void Uart::flush()
 
 void Uart::IrqHandler()
 {
-  //if data available
-	// rxBuffer.store_char(sercom->readDataUART());
+	uint8_t val = hw->RBR.bit.VALUE;
+	rxBuffer.store_char(val);
 }
 
 int Uart::available()

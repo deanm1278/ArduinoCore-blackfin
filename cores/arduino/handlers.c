@@ -6,7 +6,7 @@ void Dummy_Handler(void)
 {
 	for(int j = 0; j < 5; j++){
       PORTB->DIR_SET.bit.PX4 = 1;
-      for(unsigned long i=0; i<10000000UL; i++) asm("NOP;");
+      for(unsigned long i=0; i<1000000UL; i++) asm("NOP;");
       PORTB->DIR_CLR.bit.PX4 = 1;
       for(unsigned long i=0; i<10000000UL; i++) asm("NOP;");
     }
@@ -119,7 +119,7 @@ void SWU6_EVT_Handler			( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void SWU7_EVT_Handler			( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void TAPC0_KEYFAIL_Handler			( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 
-__attribute__ ((section(".isr_vector"))) const DeviceVectors exception_table =
+__attribute__ ((section(".isr_vector"))) const void (*exception_table[106])( void ) =
 {
 	(void*) (0UL),
 	(void*) SEC0_ERR_Handler,
@@ -228,3 +228,12 @@ __attribute__ ((section(".isr_vector"))) const DeviceVectors exception_table =
 	(void*) SWU7_EVT_Handler,
 	(void*) TAPC0_KEYFAIL_Handler,
 };
+
+void INT_HANDLER( void ){
+	uint8_t offset = SCI->SEC0_CPND0.bit.SID;
+
+	(*exception_table[offset]) ();
+
+	//clear interrupt
+	//UART1_STAT_Handler();
+}
