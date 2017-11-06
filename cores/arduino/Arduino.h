@@ -62,6 +62,7 @@ void loop( void ) ;
 
 
 #include "WVariant.h"
+#include "dma.h"
 
 #ifdef __cplusplus
 } // extern "C"
@@ -78,7 +79,7 @@ void loop( void ) ;
 #endif
 #include "delay.h"
 #ifdef __cplusplus
-  //#include "Uart.h"
+  #include "UART.h"
 #endif
 
 // Include board variant

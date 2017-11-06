@@ -34,17 +34,16 @@ void pinMode( uint32_t ulPin, uint32_t ulMode )
   EPortType port = g_APinDescription[ulPin].ulPort;
   uint32_t pin = g_APinDescription[ulPin].ulPin;
   uint32_t pinMask = (1ul << pin);
-  Portgroup *pg = (Portgroup *)g_APorts[port];
 
   //enable GPIO mode
-  pg->FER_CLR.reg |= pinMask;
+  g_APorts[port]->FER_CLR.reg |= pinMask;
 
   // Set pin mode
   switch ( ulMode )
   {
     case INPUT:
       // Set pin to input mode
-      pg->DIR_CLR.reg |= pinMask;
+      g_APorts[port]->DIR_CLR.reg |= pinMask;
     break ;
 
     case INPUT_PULLUP:
@@ -57,7 +56,7 @@ void pinMode( uint32_t ulPin, uint32_t ulMode )
 
     case OUTPUT:
       // Set pin to output mode
-      pg->DIR_SET.reg |= pinMask;
+      g_APorts[port]->DIR_SET.reg |= pinMask;
     break ;
 
     default:
@@ -77,16 +76,15 @@ void digitalWrite( uint32_t ulPin, uint32_t ulVal )
   EPortType port = g_APinDescription[ulPin].ulPort;
   uint32_t pin = g_APinDescription[ulPin].ulPin;
   uint32_t pinMask = (1ul << pin);
-  Portgroup *pg = (Portgroup *)g_APorts[port];
 
   switch ( ulVal )
   {
     case LOW:
-      pg->DATA_CLR.reg |= pinMask;
+      g_APorts[port]->DATA_CLR.reg |= pinMask;
     break ;
 
     default:
-      pg->DATA_SET.reg |= pinMask;
+      g_APorts[port]->DATA_SET.reg |= pinMask;
     break ;
   }
 

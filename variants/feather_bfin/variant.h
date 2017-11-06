@@ -39,7 +39,8 @@ extern "C"
 #endif // __cplusplus
 
 
-extern const Portgroup *g_APorts[]; 
+extern __IO Portgroup *g_APorts[];
+extern __IO Dmagroup *DMA[];
 
 
 
