@@ -41,7 +41,7 @@ extern "C"
 
 extern __IO Portgroup *g_APorts[];
 extern __IO Dmagroup *DMA[];
-
+extern __IO Sportgroup *SPORT[];
 
 
 #ifdef __cplusplus

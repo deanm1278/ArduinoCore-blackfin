@@ -36,6 +36,7 @@ const PinDescription g_APinDescription[]=
 
 __IO Portgroup *g_APorts[NUM_PORT] = PORT_INSTS;
 __IO Dmagroup *DMA[DMA_NUM] = DMA_INSTS;
+__IO Sportgroup *SPORT[SPORT_NUM] = SPORT_INSTS;
 
 Uart Serial( UART0, PIN_SERIAL_RX, PIN_SERIAL_TX ) ;
 Uart Serial1( UART1, PIN_SERIAL1_RX, PIN_SERIAL1_TX ) ;
