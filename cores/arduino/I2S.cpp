@@ -2,6 +2,7 @@
 #include "I2S.h"
 #include "variant.h"
 #include "wiring_private.h"
+#include "dma.h"
 
 I2S::I2S(Sportgroup *sport, uint8_t _pinCLK, uint8_t _pinFS, uint8_t _pinAD0, uint8_t _pinBD0) : hw(sport) , 
 	_ucPinCLK(_pinCLK) , _ucPinFS(_pinFS) , _ucPinAD0(_pinAD0) , _ucPinBD0(_pinBD0) {}
@@ -55,6 +56,108 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_B.bit.SLEN = wordLength - 1;
 
   	hw->MCTL_B.bit.MCE = 0;
+}
+
+//Endlessly DMA out the passed buffer. Must be interleaved LRLR
+void I2S::beginDMAAutobuffer(uint32_t addr, uint32_t count, bool tx)
+{
+	uint8_t ch;
+	if(tx){
+		ch = SPORT0_A_DMA;
+		if(hw == SPORT1) ch = SPORT1_A_DMA;
+	}
+	else{
+		ch = SPORT0_B_DMA;
+		if(hw == SPORT1) ch = SPORT1_B_DMA;
+	}
+
+	DMA[ch]->ADDRSTART.reg = (uint32_t)addr;
+
+	//TODO: set based on wordLength
+	DMA[ch]->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
+	DMA[ch]->XCNT.reg = count;
+	DMA[ch]->XMOD.reg = 4; //4 bytes
+
+	if(tx) DMA[ch]->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
+	else DMA[ch]->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
+
+	DMA[ch]->CFG.bit.FLOW = DMA_CFG_FLOW_AUTO; //autobuffer mode
+	DMA[ch]->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+	DMA[ch]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+}
+
+void I2S::beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t count,
+		PDMADescriptor *pingTx, PDMADescriptor *pingRx,
+		PDMADescriptor *pongTx, PDMADescriptor *pongRx)
+{
+	uint8_t chTx = SPORT0_A_DMA;
+	uint8_t chRx = SPORT0_B_DMA;
+	if(hw == SPORT1){
+		chTx = SPORT1_A_DMA;
+		chRx = SPORT1_B_DMA;
+	}
+
+	pingTx->ADDRSTART.reg = (uint32_t)addrPing;
+	pingRx->ADDRSTART.reg = (uint32_t)addrPong;
+	pongTx->ADDRSTART.reg = (uint32_t)addrPong;
+	pongRx->ADDRSTART.reg = (uint32_t)addrPing;
+
+	//TODO: set based on wordLength
+	pingTx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
+	pingTx->XCNT.reg = count;
+	pingTx->XMOD.reg = 4; //4 bytes
+	pingRx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
+	pingRx->XCNT.reg = count;
+	pingRx->XMOD.reg = 4; //4 bytes
+
+	pongTx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
+	pongTx->XCNT.reg = count;
+	pongTx->XMOD.reg = 4; //4 bytes
+	pongRx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
+	pongRx->XCNT.reg = count;
+	pongRx->XMOD.reg = 4; //4 bytes
+
+	pingTx->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
+	pongTx->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
+
+	pingRx->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
+	pongRx->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
+
+	pingTx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+	pingTx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+	pongTx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+	pongTx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+
+	pingRx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+	pingRx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+	pongRx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+	pongRx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+
+	pingTx->DSCPTR_NXT.reg = (uint32_t)pongTx;
+	pongTx->DSCPTR_NXT.reg = (uint32_t)pingTx;
+
+	pingRx->DSCPTR_NXT.reg = (uint32_t)pongRx;
+	pongRx->DSCPTR_NXT.reg = (uint32_t)pingRx;
+
+	pingTx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+	pongTx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+	pingRx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+	pongRx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+
+	DMA[chTx]->DSCPTR_NXT.reg = (uint32_t)pingTx;
+	DMA[chRx]->DSCPTR_NXT.reg = (uint32_t)pingRx;
+
+	DMA[chTx]->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
+	DMA[chRx]->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
+
+	DMA[chTx]->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+	DMA[chRx]->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+
+	DMA[chTx]->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+	DMA[chRx]->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+
+	DMA[chTx]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+	DMA[chRx]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
 }
 
 void I2S::writeDirect(int32_t l, int32_t r)

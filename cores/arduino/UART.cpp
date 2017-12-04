@@ -21,10 +21,10 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   pinPeripheral(uc_pinTX, g_APinDescription[uc_pinTX].ulPinType);
 
   //set baud rate = SCLK0/ (16^(1 - CLK.EDBO) * CLK.DIV)
-  //hw->CLK.bit.DIV = VARIANT_SCLK0 / (16 * baudrate);
+  hw->CLK.bit.DIV = VARIANT_SCLK0 / (16 * baudrate);
 
-  hw->CLK.bit.EDBO = 1;
-  hw->CLK.bit.DIV = VARIANT_SCLK0 / baudrate;
+  //hw->CLK.bit.EDBO = 1;
+  //hw->CLK.bit.DIV = VARIANT_SCLK0 / baudrate;
 
   //no parity bits
   hw->CTL.bit.PEN = 0;

@@ -25,6 +25,10 @@
 // - calls _exit (which calls monexit to dump accumulated prof data (PROFCRT))
 // - defines dummy IO routines (!FIOCRT)
 
+#ifndef __ASSEMBLY__
+#define __ASSEMBLY__
+#endif
+
 #include <bf706_device.h>
 #include <sys/anomaly_macros_rtl.h>
 
