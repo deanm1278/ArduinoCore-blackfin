@@ -41,12 +41,9 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_B.reg = 0;
   	hw->MCTL_B.reg = 0;
 
-  	hw->CTL_B.bit.ICLK = 0; //receive channel is tied to transmit channel clock in hardware
   	//set channel B to be receive
   	hw->CTL_B.bit.SPTRAN = 0;
-  	//enable primary and disable secondary
-  	hw->CTL_B.bit.SPENPRI = 1;
-  	hw->CTL_B.bit.SPENSEC = 0;
+  	hw->CTL_B.bit.ICLK = 0; //receive channel is tied to transmit channel clock in hardware
   	hw->CTL_B.bit.IFS = 0; //receive channel fs is tied to transmit channel in hardware
 
   	hw->CTL_B.bit.OPMODE = 1;
@@ -54,6 +51,12 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_B.bit.LSBF = 0; //MSB first data
   	hw->CTL_B.bit.CKRE = 1;
   	hw->CTL_B.bit.SLEN = wordLength - 1;
+
+  	hw->CTL2_B.reg = 0x03; //share fs and clk
+
+  	//enable primary and disable secondary
+  	hw->CTL_B.bit.SPENPRI = 1;
+  	hw->CTL_B.bit.SPENSEC = 0;
 
   	hw->MCTL_B.bit.MCE = 0;
 }
