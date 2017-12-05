@@ -253,8 +253,8 @@ __sec_dispatch:
 	.type _exception_table,STT_OBJECT;
 	P1.H = _exception_table;
 	P1.L = _exception_table;
-	P1 = P1 + (P0 << 2);       // &_adi_dispatched_int_vector_table[index]
-	P1 = [P1];                 // load address of handler 
+	P1 = P1 + (P0 << 2);
+	P1 = [P1];
 
 	// The called handler subroutine must save all registers onto the stack,
 	// except possibly those that weve already saved (R0-2,P0-2,ASTAT,RETS).
@@ -268,12 +268,6 @@ __sec_dispatch:
 	// R1 contains the interrupt index
 	// R2 contains the handler argument
 	CALL (P1);                 // call the handler, preserves R0
-
-/*
-	.extern _INT_HANDLER;
-    .type _INT_HANDLER,STT_FUNC;
-	CALL.X (_INT_HANDLER);
-*/
 
 	// Not we write the SID to SEC0_END to complete the interrupt cycle. This
 	// will re-enable system interrupts of *lower* priority than the one we 

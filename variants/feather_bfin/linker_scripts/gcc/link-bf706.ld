@@ -44,6 +44,7 @@ SECTIONS
 
   .text           :
   {
+  	. = ALIGN(4);
     *(.text.prologue);
     KEEP(*(.isr_vector))
     *(.text .text.* .l1.text .l1.text.*)

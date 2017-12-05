@@ -38,7 +38,7 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   //8 bit word
   hw->CTL.bit.WLS = 0x03;
 
-  /* TODO: this once interrupts are working
+  // TODO: this once interrupts are working
   //enable rx interrupt
   //without DMA channels for now
   hw->IMSK_SET.bit.ELSI = 1;
@@ -46,7 +46,8 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   hw->IMSK_SET.bit.ERXS = 1;
 
   if(hw == UART0){
-
+	 SSI->SEC0_SCTL48.bit.IEN = 1; //enable
+	 SSI->SEC0_SCTL48.bit.SEN = 1; //enable
   }
   else if(hw == UART1){
   	//TODO: update when SEC CMSIS is updated
@@ -57,7 +58,6 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   	//fail
   	while(1);
   }
-  */
 
   //enable
   hw->CTL.bit.EN = 1;
