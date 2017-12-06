@@ -89,6 +89,7 @@ void I2S::beginDMAAutobuffer(uint32_t addr, uint32_t count, bool tx)
 	DMA[ch]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
 }
 
+//TODO: this doesn't work quite yet, DMA seems to not be able to fetch descriptor
 void I2S::beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t count,
 		PDMADescriptor *pingTx, PDMADescriptor *pingRx,
 		PDMADescriptor *pongTx, PDMADescriptor *pongRx)
@@ -100,41 +101,22 @@ void I2S::beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t cou
 		chRx = SPORT1_B_DMA;
 	}
 
+	pingTx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
+	pingTx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
+	pingTx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
+	pingTx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+
+	pingTx->XCNT.reg = count;
+	pingTx->XMOD.reg = 4; //4 bytes
+
+	memcpy(pongTx, pingTx, sizeof(PDMADescriptor));
+	memcpy(pingRx, pingTx, sizeof(PDMADescriptor));
+	memcpy(pongRx, pingTx, sizeof(PDMADescriptor));
+
 	pingTx->ADDRSTART.reg = (uint32_t)addrPing;
 	pingRx->ADDRSTART.reg = (uint32_t)addrPong;
 	pongTx->ADDRSTART.reg = (uint32_t)addrPong;
 	pongRx->ADDRSTART.reg = (uint32_t)addrPing;
-
-	//TODO: set based on wordLength
-	pingTx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
-	pingTx->XCNT.reg = count;
-	pingTx->XMOD.reg = 4; //4 bytes
-	pingRx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
-	pingRx->XCNT.reg = count;
-	pingRx->XMOD.reg = 4; //4 bytes
-
-	pongTx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
-	pongTx->XCNT.reg = count;
-	pongTx->XMOD.reg = 4; //4 bytes
-	pongRx->CFG.bit.MSIZE = DMA_MSIZE_4_BYTES;
-	pongRx->XCNT.reg = count;
-	pongRx->XMOD.reg = 4; //4 bytes
-
-	pingTx->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
-	pongTx->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
-
-	pingRx->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
-	pongRx->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
-
-	pingTx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
-	pingTx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
-	pongTx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
-	pongTx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
-
-	pingRx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
-	pingRx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
-	pongRx->CFG.bit.FLOW = DMA_CFG_FLOW_DSCL;
-	pongRx->CFG.bit.PSIZE = DMA_CFG_PSIZE_4_BYTES;
 
 	pingTx->DSCPTR_NXT.reg = (uint32_t)pongTx;
 	pongTx->DSCPTR_NXT.reg = (uint32_t)pingTx;
@@ -142,10 +124,11 @@ void I2S::beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t cou
 	pingRx->DSCPTR_NXT.reg = (uint32_t)pongRx;
 	pongRx->DSCPTR_NXT.reg = (uint32_t)pingRx;
 
-	pingTx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
-	pongTx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
-	pingRx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
-	pongRx->CFG.bit.EN = DMA_CFG_ENABLE; //enable
+	pingTx->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
+	pongTx->CFG.bit.WNR = DMA_CFG_WNR_READ_FROM_MEM;
+
+	pingRx->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
+	pongRx->CFG.bit.WNR = DMA_CFG_WNR_WRITE_TO_MEM;
 
 	DMA[chTx]->DSCPTR_NXT.reg = (uint32_t)pingTx;
 	DMA[chRx]->DSCPTR_NXT.reg = (uint32_t)pingRx;
