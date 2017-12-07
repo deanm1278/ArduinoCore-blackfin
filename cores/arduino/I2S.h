@@ -16,9 +16,10 @@ class I2S
 
     void writeDirect(int32_t l, int32_t r);
 
-  private:
+  protected:
     Sportgroup *hw;
 
+  private:
     uint8_t _ucPinCLK, _ucPinFS, _ucPinAD0, _ucPinBD0;
 };
 

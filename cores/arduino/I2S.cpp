@@ -23,9 +23,7 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
 
 	 //set channel A to be transmit
   	hw->CTL_A.bit.SPTRAN = 1;
-  	//enable primary and disable secondary
-  	hw->CTL_A.bit.SPENPRI = 1;
-  	hw->CTL_A.bit.SPENSEC = 0;
+
   	hw->CTL_A.bit.ICLK = 1; //internal clock mode
   	hw->CTL_A.bit.IFS = 1;
   	//set to I2S mode
@@ -34,6 +32,12 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_A.bit.LSBF = 0; //MSB first data
   	hw->CTL_A.bit.CKRE = 1;
   	hw->CTL_A.bit.SLEN = wordLength - 1;
+
+  	hw->CTL_A.bit.TFIEN = 1;
+
+  	//enable primary and disable secondary
+  	hw->CTL_A.bit.SPENPRI = 1;
+  	hw->CTL_A.bit.SPENSEC = 0;
 
   	hw->MCTL_A.bit.MCE = 0;
 

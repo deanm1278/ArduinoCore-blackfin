@@ -61,6 +61,13 @@ enum {
 	DMA_CFG_WNR_WRITE_TO_MEM,
 };
 
+enum{
+	DMA_CFG_INT_NONE = 0,
+	DMA_CFG_INT_X_COUNT,
+	DMA_CFG_INT_Y_COUNT,
+	DMA_CFG_INT_PERIPHERAL
+};
+
 typedef struct {
 	volatile DMA_DSCPTR_NXT_Type		DSCPTR_NXT;		/**< \brief DMA0 Pointer to Next Initial Descriptor */
 	volatile DMA_ADDRSTART_Type		ADDRSTART;		/**< \brief DMA0 Start Address of Current Buffer */

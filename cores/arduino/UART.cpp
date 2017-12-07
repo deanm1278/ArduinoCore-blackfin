@@ -38,7 +38,6 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   //8 bit word
   hw->CTL.bit.WLS = 0x03;
 
-  // TODO: this once interrupts are working
   //enable rx interrupt
   //without DMA channels for now
   hw->IMSK_SET.bit.ELSI = 1;
