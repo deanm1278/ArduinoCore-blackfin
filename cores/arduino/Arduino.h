@@ -91,6 +91,8 @@ void loop( void ) ;
 //#include "wiring_shift.h"
 //#include "WInterrupts.h"
 
+#include "handlers.h"
+
 // undefine stdlib's abs if encountered
 #ifdef abs
 #undef abs

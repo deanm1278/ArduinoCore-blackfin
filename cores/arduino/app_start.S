@@ -227,6 +227,7 @@ __unknown_exception_occurred:
 	//
 	// Since theres nothing we can do, we just loop here
 	// at what we hope is a suitably informative label.
+	EMUEXCPT;
 	IDLE;
 	CSYNC;
 	JUMP __unknown_exception_occurred;

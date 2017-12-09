@@ -15,6 +15,8 @@
 //this may need to be measured on each board
 #define VARIANT_SCLK0		  (109000000ul)
 
+#define L2_ORIGIN 			  0x08002000
+
 #define NUM_PORT 3
 
 //Serial

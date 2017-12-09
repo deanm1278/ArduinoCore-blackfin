@@ -26,6 +26,8 @@ enum {
 	SYS_MDMA2_DST,
 };
 
+#define NUM_MDMA_CHANNELS 3
+
 enum {
 	DMA_MSIZE_1_BYTES = 0,
 	DMA_MSIZE_2_BYTES,

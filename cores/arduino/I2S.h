@@ -2,6 +2,7 @@
 #define _LIB_I2S_H
 
 #include <bf706_device.h>
+#include <dma.h>
 
 class I2S
 {
