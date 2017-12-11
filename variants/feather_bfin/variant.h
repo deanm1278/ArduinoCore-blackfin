@@ -13,7 +13,7 @@
 #define VARIANT_MCK			  (400000000ul)
 
 //this may need to be measured on each board
-#define VARIANT_SCLK0		  (109000000ul)
+#define VARIANT_SCLK0		  (107200000ul)
 
 #define L2_ORIGIN 			  0x08002000
 

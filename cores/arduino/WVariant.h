@@ -7,26 +7,19 @@
 extern "C" {
 #endif
 
-/* Definitions and types for pins */
-typedef enum _EAnalogChannel
-{
-  No_ADC_Channel=-1,
-  ADC_Channel0=0,
-  ADC_Channel1=1,
-  ADC_Channel2=2,
-} EAnalogChannel ;
-
 // Definitions for TC channels
-typedef enum _ETCChannel
+typedef enum _ETimerChannel
 {
   NOT_ON_TIMER=-1,
-} ETCChannel ;
-
-// Definitions for PWM channels
-typedef enum _EPWMChannel
-{
-  NOT_ON_PWM=-1,
-} EPWMChannel ;
+  TIMER_0,
+  TIMER_1,
+  TIMER_2,
+  TIMER_3,
+  TIMER_4,
+  TIMER_5,
+  TIMER_6,
+  TIMER_7,
+} ETimerChannel ;
 
 typedef enum _EPortType
 {
@@ -89,9 +82,7 @@ typedef struct _PinDescription
   uint32_t        ulPin ;
   EPioType        ulPinType ;
   uint32_t        ulPinAttribute ;
-  EAnalogChannel  ulADCChannelNumber ; /* ADC Channel number */
-  EPWMChannel     ulPWMChannel ;
-  ETCChannel      ulTCChannel ;
+  ETimerChannel   ulTimer ;
   EExt_Interrupts ulExtInt ;
 } PinDescription ;
 

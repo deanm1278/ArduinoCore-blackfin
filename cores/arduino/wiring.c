@@ -17,6 +17,7 @@
 */
 
 #include "Arduino.h"
+#include "handlers.h"
 
 #ifdef __cplusplus
 extern "C" {
