@@ -120,6 +120,13 @@ void loop( void ) ;
 
 #define bit(b) (1UL << (b))
 
+typedef int32_t q31;
+typedef int16_t q15;
+#define _F(x) ((int) (x*( (1<<31) )))
+#define _F16(x) ((int) (x*( (1<<15) )))
+
+#define FRACMUL(x,y) __builtin_bfin_mult_fr1x32x32(x, _F(y))
+
 /*
 #if (ARDUINO_SAMD_VARIANT_COMPLIANCE >= 10606)
 // Interrupts

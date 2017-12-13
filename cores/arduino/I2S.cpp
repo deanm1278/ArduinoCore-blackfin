@@ -63,6 +63,8 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_B.bit.SPENSEC = 0;
 
   	hw->MCTL_B.bit.MCE = 0;
+
+  	return true;
 }
 
 //Endlessly DMA out the passed buffer. Must be interleaved LRLR
