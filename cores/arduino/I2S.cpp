@@ -19,7 +19,7 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->MCTL_A.reg = 0;
 
   	hw->DIV_A.bit.FSDIV = (clkRate / fsRate) - 1;
-	hw->DIV_A.bit.CLKDIV = VARIANT_SCLK0 / (clkRate + 1);
+	hw->DIV_A.bit.CLKDIV = (VARIANT_SCLK0 / clkRate) - 1;
 
 	 //set channel A to be transmit
   	hw->CTL_A.bit.SPTRAN = 1;

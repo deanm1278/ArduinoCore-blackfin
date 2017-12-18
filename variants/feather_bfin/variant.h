@@ -6,14 +6,14 @@
  *----------------------------------------------------------------------------*/
 
 /** Frequency of the board main oscillator */
-#define VARIANT_MAINOSC		(400000000ul)
+#define VARIANT_MAINOSC		(408000000ul)
 
 /** Master clock frequency */
 //TODO: this will change
-#define VARIANT_MCK			  (400000000ul)
+#define VARIANT_MCK			  (408000000ul)
 
 //this may need to be measured on each board
-#define VARIANT_SCLK0		  (107200000ul)
+#define VARIANT_SCLK0		  (99000000ul)
 
 #define L2_ORIGIN 			  0x08002000
 

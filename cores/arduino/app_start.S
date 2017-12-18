@@ -30,14 +30,14 @@
 #endif
 
 #include <bf706_device.h>
-#include <sys/anomaly_macros_rtl.h>
+//#include <sys/anomaly_macros_rtl.h>
 
 #define EVT2h (REG_ICU_EVT2 >> 16)
 #define EVT2l (REG_ICU_EVT2 & 0xFFFF)
 #define UNASSIGNED_VAL 0
 #define UNASSIGNED_FILL 0
-// just IVG15
-#define INTERRUPT_BITS 0x8800
+// just IVG15, IVG11, IVGTMR
+#define INTERRUPT_BITS 0x8840
 
 	.text;
 	.align 2;
@@ -47,6 +47,17 @@
 __start:
 
 	CSYNC;
+
+	//disable branch prediction
+	R0 = SYSCFG;
+	BITCLR(R0,8);
+	SYSCFG = R0;
+
+	R0.L = __start;
+	R0.H = __start;
+	P0.H = HI(REG_RCU0_SVECT0);
+	P0.L = LO(REG_RCU0_SVECT0);
+	[P0] = R0;
 
 	// Zap loop counters to zero, to make sure that
 	// hw loops are disabled - it could be really baffling
@@ -89,6 +100,18 @@ L$ivt:	[P0++] = R1;
 	R1.H = __sec_dispatch
 	[P0+(REG_ICU_EVT11-REG_ICU_EVT15)] = R1;  // write &sec_dispatch to EVT11.
 
+	//Set handler for core timer
+	P0.H = HI(REG_ICU_EVT6);
+	P0.L = LO(REG_ICU_EVT6);
+	R1.L = __systick_dispatch
+	R1.H = __systick_dispatch
+	[P0++] = R1;
+
+	R1 = SYSCFG;
+	R0.H = 0x00;
+    R0.L = 0x0246;
+    R1 = R0 | R1;
+    SYSCFG = R1;
 
 	// Initialise the stack.
 	// Note: this points just past the end of the section.
@@ -236,6 +259,21 @@ __unknown_exception_occurred:
 
 	.local	L$argv
 	.comm	L$argv,4,4
+
+//core tmr handler dispatcher
+	.align 2
+	.type __systick_dispatch, STT_FUNC;
+__systick_dispatch:
+	DISPATCHER_PUSH;
+
+	.extern _systick_handler;
+	.type _systick_handler,STT_FUNC;
+	CALL.X _systick_handler;
+
+	//restore registers
+	DISPATCHER_POP;
+
+	RTI;
 
 //interrupt dispatcher
 	.align 2

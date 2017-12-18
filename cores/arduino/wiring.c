@@ -33,6 +33,13 @@ void __init( void )
   //SEC_Global->SEC0_GCTL.bit.RESET = 1;
   //SCI->SEC0_CCTL0.bit.RESET = 1;
 
+  //systick timer enable
+  TMR->TCNTL.bit.PWR = 1;
+  TMR->TCNTL.bit.AUTORLD = 1;
+  TMR->TSCALE.reg = 1; //decrement every 2 clock cycles
+  TMR->TPERIOD.reg = (VARIANT_MCK >> 1)/1000; //1 per ms
+  TMR->TCNTL.bit.EN = 1;
+
   //enable interrupts
   SEC_Global->SEC0_GCTL.bit.EN = 1;
   SCI->SEC0_CCTL0.bit.EN = 1;
