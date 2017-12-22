@@ -93,7 +93,7 @@ SECTIONS
  
   __end = .; PROVIDE (_end = .);
   __stack_start = ORIGIN(MEM_L1_SCRATCH);
-  __stack_end   = ORIGIN(MEM_L1_SCRATCH) + 0x200;
+  __stack_end   = ORIGIN(MEM_L1_SCRATCH) + LENGTH(MEM_L1_SCRATCH);
  
   /DISCARD/ : { *(.note.GNU-stack) }
 }
