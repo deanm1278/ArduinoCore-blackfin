@@ -43,10 +43,12 @@ Uart Serial1( UART1, PIN_SERIAL1_RX, PIN_SERIAL1_TX ) ;
 
 extern "C" {
 
+/*
 int UART0_STAT_Handler( int IQR_NUM ){
   Serial.IrqHandler();
   return IQR_NUM;
 }
+*/
 
 int UART1_STAT_Handler( int IQR_NUM ){
   Serial1.IrqHandler();

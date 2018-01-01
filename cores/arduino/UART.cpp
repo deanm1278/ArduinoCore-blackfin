@@ -45,13 +45,12 @@ void Uart::begin(unsigned long baudrate, uint16_t config)
   hw->IMSK_SET.bit.ERXS = 1;
 
   if(hw == UART0){
-	 SSI->SEC0_SCTL48.bit.IEN = 1; //enable
-	 SSI->SEC0_SCTL48.bit.SEN = 1; //enable
+	setIRQPriority(48, IRQ_MAX_PRIORITY >> 1);
+	enableIRQ(48);
   }
   else if(hw == UART1){
-  	//TODO: update when SEC CMSIS is updated
-  	SSI->SEC0_SCTL51.bit.IEN = 1; //enable
-  	SSI->SEC0_SCTL51.bit.SEN = 1; //enable
+	  setIRQPriority(51, IRQ_MAX_PRIORITY >> 1);
+	  enableIRQ(51);
   }
   else{
   	//fail
