@@ -39,7 +39,7 @@ Timer::Timer(uint8_t pin)
 bool Timer::begin( uint32_t freq )
 {
 	if(_tmr != NOT_ON_TIMER){
-		setCfg(TIMER_CFG_TMODE_CONTINUOUS_PWM);
+		setCfg(TIMER_CFG_TMODE_CONTINUOUS_PWM | (0x3 << 4));
 		setFrequency(freq);
 		setDutyCycle(.5);
 
