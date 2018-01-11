@@ -45,8 +45,8 @@ void TwoWire::begin(uint8_t address) {
 }
 
 void TwoWire::setClock(uint32_t baudrate) {
-	hw->CLKDIV.bit.CLKLO = (10000000/baudrate);
-	hw->CLKDIV.bit.CLKHI = (10000000/baudrate);
+	hw->CLKDIV.bit.CLKLO = (10000000/baudrate/2);
+	hw->CLKDIV.bit.CLKHI = (10000000/baudrate/2);
 }
 
 void TwoWire::end() {
@@ -65,6 +65,22 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
   rxBuffer.clear();
 
   hw->MSTRADDR.reg = address;
+  hw->FIFOCTL.reg = 0;
+  hw->MSTRCTL.reg = ((uint32_t)quantity << 6)| 0x05;
+
+  while(byteRead < quantity){
+
+	//TODO: we may want to add some sort of timeout here...
+	while(!hw->ISTAT.bit.RXSERV);
+	rxBuffer.store_char( hw->RXDATA8.reg );
+
+	hw->ISTAT.bit.RXSERV = 1;
+	byteRead++;
+
+	if(hw->MSTRSTAT.reg & 0x0C) break;
+  }
+
+  hw->ISTAT.bit.MCOMP = 1;
 
   return byteRead;
 }
@@ -96,21 +112,26 @@ uint8_t TwoWire::endTransmission(bool stopBit)
 
   hw->FIFOCTL.reg = 0;
 
+  uint8_t bytesAvailable = txBuffer.available() & 0xFF;
+
   hw->TXDATA8.reg = txBuffer.read_char();
+  hw->MSTRCTL.reg = ((uint32_t)bytesAvailable << 6)| 0x01;
 
-  hw->MSTRCTL.reg = 0x00;
+  //send first byte
+  while(!hw->ISTAT.bit.TXSERV);
+  hw->ISTAT.bit.TXSERV = 1;
 
-  hw->MSTRCTL.bit.DCNT = 0xFF; //disable counter
-  hw->MSTRCTL.bit.EN = 1;
-
-  // Send all buffer
+  // Send rest of buffer
   while( txBuffer.available() ){
-	  while(hw->FIFOSTAT.bit.TXSTAT);
 	  hw->TXDATA8.reg = txBuffer.read_char();
+
+	  while(!hw->ISTAT.bit.TXSERV);
+	  hw->ISTAT.bit.TXSERV = 1;
   }
 
-  hw->MSTRCTL.bit.STOP = 1;
-  hw->MSTRCTL.bit.EN = 0;
+  hw->ISTAT.bit.MCOMP = 1;
+
+  //TODO: error codes
 
   return 0;
 }
@@ -180,7 +201,7 @@ void TwoWire::onRequest(void(*function)(void))
 
 void TwoWire::onService(void)
 {
-
+	//TODO: slave mode interrupt
 }
 
 #if WIRE_INTERFACES_COUNT > 0
