@@ -127,6 +127,11 @@ typedef int16_t q15;
 
 #define FRACMUL(x,y) __builtin_bfin_mult_fr1x32x32(x, _F(y))
 
+typedef struct complex_q31 {
+    q31 re;
+    q31 im;
+} complex_q31;
+
 #define L2DATA __attribute__ ((section(".l2")))
 #define RAMB __attribute__ ((section(".data2")))
 
