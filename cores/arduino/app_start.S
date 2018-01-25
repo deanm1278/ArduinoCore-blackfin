@@ -265,7 +265,6 @@ __unknown_exception_occurred:
 	.type __systick_dispatch, STT_FUNC;
 __systick_dispatch:
 	DISPATCHER_PUSH;
-
 	.extern _systick_handler;
 	.type _systick_handler,STT_FUNC;
 	CALL.X _systick_handler;

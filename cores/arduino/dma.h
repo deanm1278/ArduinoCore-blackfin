@@ -70,7 +70,7 @@ enum{
 	DMA_CFG_INT_PERIPHERAL
 };
 
-typedef struct {
+typedef struct __attribute__ ((__packed__)) {
 	volatile DMA_DSCPTR_NXT_Type		DSCPTR_NXT;		/**< \brief DMA0 Pointer to Next Initial Descriptor */
 	volatile DMA_ADDRSTART_Type		ADDRSTART;		/**< \brief DMA0 Start Address of Current Buffer */
 	volatile DMA_CFG_Type		CFG;		/**< \brief DMA0 Configuration Register */
@@ -78,7 +78,7 @@ typedef struct {
 	volatile DMA_XMOD_Type		XMOD;		/**< \brief DMA0 Inner Loop Address Increment */
 	volatile DMA_YCNT_Type		YCNT;		/**< \brief DMA0 Outer Loop Count Start Value (2D only) */
 	volatile DMA_YMOD_Type		YMOD;		/**< \brief DMA0 Outer Loop Address Increment (2D only) */
-} PDMADescriptor;
+} DMADescriptor;
 
 void mdma(uint32_t dst, uint32_t src, uint32_t size);
 

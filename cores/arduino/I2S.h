@@ -11,9 +11,11 @@ class I2S
     bool begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength);
     void beginDMAAutobuffer(uint32_t addr, uint32_t count, bool tx = true);
 
+    /*
     void beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t count,
     		PDMADescriptor *pingTx, PDMADescriptor *pingRx,
     		PDMADescriptor *pongTx, PDMADescriptor *pongRx);
+    */
 
     void writeDirect(int32_t l, int32_t r);
 

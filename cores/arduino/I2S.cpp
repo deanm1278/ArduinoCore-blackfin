@@ -95,6 +95,7 @@ void I2S::beginDMAAutobuffer(uint32_t addr, uint32_t count, bool tx)
 	DMA[ch]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
 }
 
+/*
 //TODO: this doesn't work quite yet, DMA seems to not be able to fetch descriptor
 void I2S::beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t count,
 		PDMADescriptor *pingTx, PDMADescriptor *pingRx,
@@ -151,6 +152,7 @@ void I2S::beginDMAPassThrough(uint32_t addrPing, uint32_t addrPong, uint32_t cou
 	DMA[chTx]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
 	DMA[chRx]->CFG.bit.EN = DMA_CFG_ENABLE; //enable
 }
+*/
 
 void I2S::writeDirect(int32_t l, int32_t r)
 {
