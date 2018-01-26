@@ -36,8 +36,8 @@
 #define EVT2l (REG_ICU_EVT2 & 0xFFFF)
 #define UNASSIGNED_VAL 0
 #define UNASSIGNED_FILL 0
-// just IVG15, IVG11, IVGTMR
-#define INTERRUPT_BITS 0x8840
+// just IVG15, IVG14, IVG13, IVG11, IVGTMR
+#define INTERRUPT_BITS 0xE840
 
 	.text;
 	.align 2;
@@ -51,6 +51,7 @@ __start:
 	//disable branch prediction
 	R0 = SYSCFG;
 	BITCLR(R0,8);
+	BITCLR(R0,9);
 	SYSCFG = R0;
 
 	R0.L = __start;
@@ -109,7 +110,7 @@ L$ivt:	[P0++] = R1;
 
 	R1 = SYSCFG;
 	R0.H = 0x00;
-    R0.L = 0x0246;
+    R0.L = 0x0042;
     R1 = R0 | R1;
     SYSCFG = R1;
 
