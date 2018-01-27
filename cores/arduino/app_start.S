@@ -110,7 +110,7 @@ L$ivt:	[P0++] = R1;
 
 	R1 = SYSCFG;
 	R0.H = 0x00;
-    R0.L = 0x0042;
+    R0.L = 0x0242;
     R1 = R0 | R1;
     SYSCFG = R1;
 

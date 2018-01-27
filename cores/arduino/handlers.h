@@ -25,12 +25,8 @@ static inline void setIRQPriority(uint8_t num, uint8_t prio)
 	*(volatile uint32_t *)(((uint32_t)&SSI->SEC0_SCTL0) + (num << 3)) |= (prio << 8);
 }
 
-static inline void noInterrupts( uint32_t *imask ){
-	__asm__ volatile ("cli %0;" : "=r"(imask) );
-}
+#define noInterrupts() ({ unsigned int __rval; __asm__ __volatile__ ("cli R7; %0 = R7;" : "=r"(__rval) : : "R7"); __rval; })
 
-static inline void interrupts( uint32_t imask ){
-	__asm__ volatile ("sti %0;" : : "r"(imask) );
-}
+#define interrupts(x) __asm__ __volatile__ ("R7 = %0; sti R7;" : : "r"(x) : "R7")
 
 #endif
