@@ -33,7 +33,7 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_A.bit.CKRE = 1;
   	hw->CTL_A.bit.SLEN = wordLength - 1;
 
-  	hw->CTL_A.bit.TFIEN = 1;
+  	//hw->CTL_A.bit.TFIEN = 1;
 
   	//enable primary and disable secondary
   	hw->CTL_A.bit.SPENPRI = 1;
