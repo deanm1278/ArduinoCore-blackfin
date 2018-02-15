@@ -28,6 +28,16 @@
 #define PIN_SERIAL1_TX       (1ul)
 
 #define WIRE_INTERFACES_COUNT 1
+#define SPI_INTERFACES_COUNT 1
+
+#define PERIPH_SPI SPI2
+
+#define PIN_SPI_SCK     16
+#define PIN_SPI_MISO    17
+#define PIN_SPI_MOSI    18
+#define PIN_SPI_D2      19
+#define PIN_SPI_D3      20
+#define PIN_SPI_SS      21
 
 /*----------------------------------------------------------------------------
  *        Headers
