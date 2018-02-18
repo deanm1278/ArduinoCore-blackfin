@@ -196,25 +196,35 @@ void SPIClass::setDataMode(uint8_t mode)
 byte SPIClass::transfer(uint8_t data)
 {
     _hw->TFIFO.reg = data;
-    _hw->TXCTL.bit.TEN = 1;
     _hw->RXCTL.bit.REN = 1;
+    _hw->TXCTL.bit.TEN = 1;
     _hw->CTL.reg |= 0x01;
 
-    while(!_hw->STAT.bit.SPIF);
+    //wait for the byte to be ready in the FIFO
+    while(_hw->STAT.bit.RFE);
 
     uint32_t readData = _hw->RFIFO.reg;
     return readData;
 }
 
 uint16_t SPIClass::transfer16(uint16_t data) {
-    //TODO: this
+
+	uint16_t low, high;
+
+	high = transfer(data >> 8);
+	low = transfer(data & 0xFF);
+
+	return (high << 8) | (low & 0xFF);
 }
 
 void SPIClass::transfer(void *buf, size_t count)
 {
   uint8_t *buffer = reinterpret_cast<uint8_t *>(buf);
 
-
+  for(int i=0; i<count; i++){
+	  *buffer = transfer(*buffer);
+	  buffer++;
+  }
 }
 
 void SPIClass::attachInterrupt() {

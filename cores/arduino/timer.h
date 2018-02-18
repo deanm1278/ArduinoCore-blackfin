@@ -22,14 +22,17 @@ enum {
 	TIMER_CFG_PININT,
 };
 
+#define TIMER_NO_PIN -1
+
 class Timer {
 public:
-	Timer(uint8_t pin);
+	Timer(int pin = TIMER_NO_PIN);
 
 	bool begin( uint32_t freq );
 
 	void enable( void );
 	void disable( void );
+	void clearInterrupt( void );
 
 	void setDutyCycle( float duty );
 	void setFrequency( uint32_t freq );

@@ -127,6 +127,13 @@ typedef uint32_t q16;
 
 #define FRACMUL(x,y) __builtin_bfin_mult_fr1x32x32(x, _F(y))
 
+#define PROFILE(name, x) { uint32_t __cycles, __deltaCycles; \
+	__asm__ volatile("%0 = CYCLES;" : "=r"(__cycles)); \
+	x; \
+	__asm__ volatile("%0 = CYCLES;" : "=r"(__deltaCycles)); \
+	Serial.print("["); Serial.print(name); Serial.print("] : "); \
+	Serial.println(__deltaCycles - __cycles); __asm__ volatile("EMUEXCPT;"); }
+
 typedef struct complex_q31 {
     q31 re;
     q31 im;

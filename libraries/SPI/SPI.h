@@ -37,6 +37,12 @@
 #define MSB_FIRST 0
 #define LSB_FIRST 1
 
+enum {
+	SPI_TRANSFER_SIZE_1_BYTES = 0,
+	SPI_TRANSFER_SIZE_2_BYTES,
+	SPI_TRANSFER_SIZE_4_BYTES,
+};
+
 class SPISettings {
   public:
   SPISettings(uint32_t clock, uint8_t bitOrder, uint8_t dataMode) {
