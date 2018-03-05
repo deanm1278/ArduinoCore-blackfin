@@ -122,8 +122,8 @@ void loop( void ) ;
 
 typedef int32_t q31;
 typedef uint32_t q16;
-#define _F(x) ((int) (x*( (1<<31) )))
-#define _F16(x) ((uint32_t) (x*( (1<<16) )))
+#define _F(x) ((int) ((x)*( (1<<31) )))
+#define _F16(x) ((uint32_t) ((x)*( (1<<16) )))
 
 #define FRACMUL(x,y) __builtin_bfin_mult_fr1x32x32(x, _F(y))
 

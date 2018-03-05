@@ -56,8 +56,7 @@ __start:
 
 	R0.L = __start;
 	R0.H = __start;
-	P0.H = HI(REG_RCU0_SVECT0);
-	P0.L = LO(REG_RCU0_SVECT0);
+	P0 = REG_RCU0_SVECT0;
 	[P0] = R0;
 
 	// Zap loop counters to zero, to make sure that
@@ -76,8 +75,7 @@ __start:
 	L3 = R7;
 
 	// Initialise the Event Vector table.
-	P0.H = EVT2h;
-	P0.L = EVT2l;
+	P0 = REG_ICU_EVT2;
 
 	// Install __unknown_exception_occurred in EVT so that
 	// there is defined behaviour.
