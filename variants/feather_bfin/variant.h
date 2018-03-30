@@ -24,8 +24,8 @@
 #define PIN_SERIAL_TX  		(15ul)
 
 // Serial1
-#define PIN_SERIAL1_RX       (0ul)
-#define PIN_SERIAL1_TX       (1ul)
+#define PIN_SERIAL1_RX       (1ul)
+#define PIN_SERIAL1_TX       (0ul)
 
 #define WIRE_INTERFACES_COUNT 1
 #define SPI_INTERFACES_COUNT 1
