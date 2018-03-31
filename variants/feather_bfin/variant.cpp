@@ -43,6 +43,9 @@ const PinDescription g_APinDescription[]=
 
   //22 SAMD SS
   { EPORT_B, 5, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE },  //SAMD SS
+
+  //23 SAMD DRDY
+  { EPORT_B, 3, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_3 },
 };
 
 __IO Portgroup *g_APorts[NUM_PORT] = PORT_INSTS;

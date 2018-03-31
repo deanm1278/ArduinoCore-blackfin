@@ -22,7 +22,6 @@
  extern "C" {
 #endif
 
-//TODO: digital stuff once PORTS are set to same object
 
 void pinMode( uint32_t ulPin, uint32_t ulMode )
 {
@@ -34,6 +33,7 @@ void pinMode( uint32_t ulPin, uint32_t ulMode )
   EPortType port = g_APinDescription[ulPin].ulPort;
   uint32_t pin = g_APinDescription[ulPin].ulPin;
   uint32_t pinMask = (1ul << pin);
+  uint32_t pintMask = (1ul << g_APinDescription[ulPin].ulExtInt);
 
   //enable GPIO mode
   g_APorts[port]->FER_CLR.reg = pinMask;
@@ -41,10 +41,57 @@ void pinMode( uint32_t ulPin, uint32_t ulMode )
   // Set pin mode
   switch ( ulMode )
   {
-    case INPUT:
-      // Set pin to input mode
+  	case INPUT:
+    case INPUT_HIGH:
+      // Set pin to input mode, high or rising edge sensitive
+      g_APorts[port]->POL_CLR.reg = pinMask;
       g_APorts[port]->DIR_CLR.reg = pinMask;
+      g_APorts[port]->INEN_SET.reg = pinMask;
     break ;
+
+    case INPUT_LOW:
+    	// Set pin to input mode, low or falling edge sensitive
+    	g_APorts[port]->POL_SET.reg = pinMask;
+    	g_APorts[port]->DIR_CLR.reg = pinMask;
+    	g_APorts[port]->INEN_SET.reg = pinMask;
+    break;
+
+    case INTERRUPT_HIGH:
+    	g_APorts[port]->POL_CLR.reg = pinMask;
+    	g_APorts[port]->DIR_CLR.reg = pinMask;
+    	PINT0->INV_CLR.reg = pintMask;
+    	PINT0->EDGE_CLR.reg = pintMask;
+    	PINT0->MSK_SET.reg = pintMask;
+    	g_APorts[port]->INEN_SET.reg = pinMask;
+    break;
+
+    case INTERRUPT_RISING:
+    	g_APorts[port]->POL_CLR.reg = pinMask;
+    	g_APorts[port]->DIR_CLR.reg = pinMask;
+    	PINT0->INV_CLR.reg = pintMask;
+    	PINT0->EDGE_SET.reg = pintMask;
+    	PINT0->MSK_SET.reg = pintMask;
+    	g_APorts[port]->INEN_SET.reg = pinMask;
+    break;
+
+    //TODO: LOW and FALLING interrupts seem to be broken
+    case INTERRUPT_LOW:
+    	g_APorts[port]->POL_SET.reg = pinMask;
+    	g_APorts[port]->DIR_CLR.reg = pinMask;
+    	PINT0->INV_SET.reg = pintMask;
+    	PINT0->EDGE_CLR.reg = pintMask;
+    	PINT0->MSK_SET.reg = pintMask;
+    	g_APorts[port]->INEN_SET.reg = pinMask;
+    break;
+
+    case INTERRUPT_FALLING:
+    	g_APorts[port]->POL_SET.reg = pinMask;
+    	g_APorts[port]->DIR_CLR.reg = pinMask;
+    	PINT0->INV_SET.reg = pintMask;
+    	PINT0->EDGE_SET.reg = pintMask;
+    	PINT0->MSK_SET.reg = pintMask;
+    	g_APorts[port]->INEN_SET.reg = pinMask;
+    break;
 
     case INPUT_PULLUP:
       // Set pin to input mode with pull-up resistor enabled
@@ -104,6 +151,12 @@ int digitalRead( uint32_t ulPin )
   //TODO: read input
 
   return LOW ;
+}
+
+void clearInterrupt( uint32_t ulPin )
+{
+	uint32_t pintMask = (1ul << g_APinDescription[ulPin].ulExtInt);
+	PINT0->LATCH.reg = pintMask;
 }
 
 #ifdef __cplusplus

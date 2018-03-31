@@ -64,6 +64,8 @@ extern void digitalWrite( uint32_t dwPin, uint32_t dwVal ) ;
  */
 extern int digitalRead( uint32_t ulPin ) ;
 
+extern void clearInterrupt( uint32_t ulPin ) ;
+
 #ifdef __cplusplus
 }
 #endif

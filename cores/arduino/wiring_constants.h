@@ -30,6 +30,13 @@ extern "C"{
 #define OUTPUT          (0x1)
 #define INPUT_PULLUP    (0x2)
 #define INPUT_PULLDOWN  (0x3)
+#define INPUT_HIGH		(0x4)
+#define INPUT_LOW		(0x5)
+
+#define INTERRUPT_HIGH		(0x6)
+#define INTERRUPT_RISING	(0x7)
+#define INTERRUPT_LOW		(0x8)
+#define INTERRUPT_FALLING	(0x9)
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
