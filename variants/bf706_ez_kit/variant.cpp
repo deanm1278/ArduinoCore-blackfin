@@ -2,6 +2,7 @@
 
 /*
  * Pins descriptions
+ * TODO: these aren't done yet
  */
 const PinDescription g_APinDescription[]=
 {
@@ -27,7 +28,7 @@ const PinDescription g_APinDescription[]=
   { NOT_A_PORT, 0, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE },
 
   //13 LED
-  { EPORT_B, 4, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE },
+  { EPORT_C, 3, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE },
 
   //14..15 Serial USB
   { EPORT_C, 1, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE }, // UART1_RX
@@ -60,8 +61,8 @@ void initVariant() {
 
   CGU0->PLLCTL.bit.PLLBPCL = 1;
   while( (CGU0->STAT.reg & 0xF) != 0x05 ); //wait
-  CGU0->DIV.reg = 0x03062643;
-  CGU0->CTL.reg = 0x00001A00;
+  CGU0->DIV.reg = 0x03042442;
+  CGU0->CTL.reg = 0x00002000;
 
   while(CGU0->STAT.bit.PLLBP || CGU0->STAT.bit.CLKSALGN || (!CGU0->STAT.bit.PLOCK)); //wait for alignment and lock
 }
