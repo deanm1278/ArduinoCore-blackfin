@@ -34,8 +34,8 @@
 #define SPI_MODE2 0x03
 #define SPI_MODE3 0x01
 
-#define MSB_FIRST 0
-#define LSB_FIRST 1
+#define MSB_FIRST 1
+#define LSB_FIRST 0
 
 enum {
 	SPI_TRANSFER_SIZE_1_BYTES = 0,
@@ -121,19 +121,19 @@ class SPIClass {
   extern SPIClass SPI;
 #endif
 #if SPI_INTERFACES_COUNT > 1
-  extern SPIClass SPI1;
+  extern SPIClass _SPI1;
 #endif
 #if SPI_INTERFACES_COUNT > 2
-  extern SPIClass SPI2;
+  extern SPIClass _SPI2;
 #endif
 #if SPI_INTERFACES_COUNT > 3
-  extern SPIClass SPI3;
+  extern SPIClass _SPI3;
 #endif
 #if SPI_INTERFACES_COUNT > 4
-  extern SPIClass SPI4;
+  extern SPIClass _SPI4;
 #endif
 #if SPI_INTERFACES_COUNT > 5
-  extern SPIClass SPI5;
+  extern SPIClass _SPI5;
 #endif
 
 #endif

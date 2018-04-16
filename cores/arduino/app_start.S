@@ -106,11 +106,10 @@ L$ivt:	[P0++] = R1;
 	R1.H = __systick_dispatch
 	[P0++] = R1;
 
-	R1 = SYSCFG;
-	R0.H = 0x00;
-    R0.L = 0x0242;
-    R1 = R0 | R1;
-    SYSCFG = R1;
+	//R1 = SYSCFG;
+    R0 = 0x0242;
+    //R1 = R0 | R1;
+    SYSCFG = R0;
 
 	// Initialise the stack.
 	// Note: this points just past the end of the section.

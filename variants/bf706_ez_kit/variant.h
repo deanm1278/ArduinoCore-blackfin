@@ -19,29 +19,41 @@
 
 #define NUM_PORT 3
 
+#define LED_BUILTIN 	(14ul)
+
 //Serial
-#define PIN_SERIAL_RX  		(14ul)
-#define PIN_SERIAL_TX  		(15ul)
+#define PIN_SERIAL_RX  		(0ul)
+#define PIN_SERIAL_TX  		(1ul)
 
 // Serial1
-#define PIN_SERIAL1_RX       (1ul)
-#define PIN_SERIAL1_TX       (0ul)
+#define PIN_SERIAL1_RX       (8ul)
+#define PIN_SERIAL1_TX       (4ul)
 
 #define WIRE_INTERFACES_COUNT 1
-#define SPI_INTERFACES_COUNT 1
+#define SPI_INTERFACES_COUNT 2
 
-#define PERIPH_SPI SPI2
+#define PERIPH_SPI SPI1
 
-#define PIN_SPI_SCK     16
-#define PIN_SPI_MISO    17
-#define PIN_SPI_MOSI    18
-#define PIN_SPI_D2      19
-#define PIN_SPI_D3      20
-#define PIN_SPI_SS      21
+//arduino SPI default is bfin peripheral SPI1
+#define PIN_SPI_SCK     13
+#define PIN_SPI_MISO    12
+#define PIN_SPI_MOSI    11
+#define PIN_SPI_SS      9
 
-#define PIN_SAMD_SS     22
+#define SS PIN_SPI_SS
 
-#define PIN_SAMD_DRDY	23
+#define PERIPH_SPI1 SPI2
+
+//arduino SPI1 is bfin peripheral SPI2 (confusing but helps compatibility)
+#define PIN_SPI1_SCK     15
+#define PIN_SPI1_MISO    16
+#define PIN_SPI1_MOSI    17
+#define PIN_SPI1_D2		 18
+#define PIN_SPI1_D3		 19
+#define PIN_SPI1_SS      20
+
+#define SS1 PIN_SPI1_SS
+
 
 /*----------------------------------------------------------------------------
  *        Headers
