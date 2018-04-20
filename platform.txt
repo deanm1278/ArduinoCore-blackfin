@@ -124,13 +124,13 @@ tools.bossac.upload.network_pattern="{network_cmd}" -address {serial.port} -port
 # OpenOCD sketch upload
 #
 
-tools.openocd.path={runtime.tools.openocd-0.9.0-arduino6-static.path}
+tools.openocd.path=C:\cygwin64\bfin-gnu-new\buildscript\bfin-elf-win\
 tools.openocd.cmd=bin/openocd
 tools.openocd.cmd.windows=bin/openocd.exe
 
 tools.openocd.upload.params.verbose=-d2
 tools.openocd.upload.params.quiet=-d0
-tools.openocd.upload.pattern="{path}/{cmd}" {upload.verbose} -s "{path}/share/openocd/scripts/" -f "{runtime.platform.path}/variants/{build.variant}/{build.openocdscript}" -c "telnet_port disabled; program {{{build.path}/{build.project_name}.bin}} verify reset 0x2000; shutdown"
+tools.openocd.upload.pattern="{path}/{cmd}" {upload.verbose} -s "{path}/share/openocd/scripts/" -f "{runtime.platform.path}/variants/{build.variant}/{build.openocdscript}" -c "telnet_port disabled; load_bootloader {{runtime.platform.path}/bootloaders/{bootloader.file}}; flash write_image {{build.path}/{build.project_name}.ldr} 0 bin; shutdown"
 
 tools.openocd.network_cmd={runtime.tools.arduinoOTA.path}/bin/arduinoOTA
 tools.openocd.upload.network_pattern={network_cmd} -address {serial.port} -port 65280 -username arduino -password "{network.password}" -sketch "{build.path}/{build.project_name}.bin" -upload /sketch -b
