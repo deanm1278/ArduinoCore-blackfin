@@ -148,9 +148,11 @@ int digitalRead( uint32_t ulPin )
     return LOW ;
   }
 
-  //TODO: read input
+  EPortType port = g_APinDescription[ulPin].ulPort;
+  uint32_t pin = g_APinDescription[ulPin].ulPin;
+  uint32_t pinMask = (1ul << pin);
 
-  return LOW ;
+  return ((g_APorts[port]->DATA.reg & pinMask) >> pin);
 }
 
 void clearInterrupt( uint32_t ulPin )

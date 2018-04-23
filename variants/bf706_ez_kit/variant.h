@@ -30,7 +30,7 @@
 #define PIN_SERIAL1_TX       (4ul)
 
 #define WIRE_INTERFACES_COUNT 1
-#define SPI_INTERFACES_COUNT 2
+#define SPI_INTERFACES_COUNT 3
 
 #define PERIPH_SPI SPI1
 
@@ -53,6 +53,18 @@
 #define PIN_SPI1_SS      20
 
 #define SS1 PIN_SPI1_SS
+
+#define PERIPH_SPI2 SPI0
+
+#define PIN_SPI2_SCK     21
+#define PIN_SPI2_MISO    22
+#define PIN_SPI2_MOSI    23
+
+//I2S
+#define PIN_BCLK 26
+#define PIN_FS 27
+#define PIN_AD0 24
+#define PIN_BD0 25
 
 
 /*----------------------------------------------------------------------------

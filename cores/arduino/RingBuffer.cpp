@@ -19,6 +19,8 @@
 #include "RingBuffer.h"
 #include <string.h>
 
+#include <Arduino.h>
+
 RingBuffer::RingBuffer( void )
 {
     memset( _aucBuffer, 0, SERIAL_BUFFER_SIZE ) ;
@@ -27,6 +29,7 @@ RingBuffer::RingBuffer( void )
 
 void RingBuffer::store_char( uint8_t c )
 {
+  uint32_t mask = noInterrupts();
   int i = nextIndex(_iHead);
 
   // if we should be storing the received character into the location
@@ -38,6 +41,7 @@ void RingBuffer::store_char( uint8_t c )
     _aucBuffer[_iHead] = c ;
     _iHead = i ;
   }
+  interrupts(mask);
 }
 
 void RingBuffer::clear()
@@ -48,12 +52,14 @@ void RingBuffer::clear()
 
 int RingBuffer::read_char()
 {
+	uint32_t mask = noInterrupts();
 	if(_iTail == _iHead)
 		return -1;
 
 	uint8_t value = _aucBuffer[_iTail];
 	_iTail = nextIndex(_iTail);
 
+	interrupts(mask);
 	return value;
 }
 

@@ -37,7 +37,7 @@ void __init( void )
   TMR->TCNTL.bit.PWR = 1;
   TMR->TCNTL.bit.AUTORLD = 1;
   TMR->TSCALE.reg = 1; //decrement every 2 clock cycles
-  TMR->TPERIOD.reg = (VARIANT_MCK >> 1)/1000; //1 per ms
+  TMR->TPERIOD.reg = (VARIANT_MCK)/1000; //1 per ms
   TMR->TCNTL.bit.EN = 1;
 
   //enable interrupts

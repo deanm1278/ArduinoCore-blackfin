@@ -18,20 +18,36 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_A.reg = 0;
   	hw->MCTL_A.reg = 0;
 
+#ifdef _VARIANT_BF706_EZ_KIT_
+  	//not the best but we will fix later
+  	hw->DIV_A.bit.FSDIV = 100;
+	hw->DIV_A.bit.CLKDIV = 1;
+#else
   	hw->DIV_A.bit.FSDIV = (clkRate / fsRate) - 1;
 	hw->DIV_A.bit.CLKDIV = (VARIANT_SCLK0 / clkRate) - 1;
+#endif
+
+
 
 	 //set channel A to be transmit
   	hw->CTL_A.bit.SPTRAN = 1;
 
+#ifdef _VARIANT_BF706_EZ_KIT_
+  	hw->CTL_A.bit.ICLK = 0; //external clock mode
+  	hw->CTL_A.bit.IFS = 0;
+#else
   	hw->CTL_A.bit.ICLK = 1; //internal clock mode
   	hw->CTL_A.bit.IFS = 1;
+#endif
   	//set to I2S mode
   	hw->CTL_A.bit.OPMODE = 1;
   	hw->CTL_A.bit.LAFS = 0;
   	hw->CTL_A.bit.LSBF = 0; //MSB first data
   	hw->CTL_A.bit.CKRE = 1;
+  	hw->CTL_A.bit.LFS = 1;
+  	hw->CTL_A.bit.FSR = 1;
   	hw->CTL_A.bit.SLEN = wordLength - 1;
+  	hw->CTL_A.bit.DTYPE = 1;
 
   	//hw->CTL_A.bit.TFIEN = 1;
 
@@ -54,7 +70,10 @@ bool I2S::begin(uint32_t clkRate, uint32_t fsRate, uint8_t wordLength)
   	hw->CTL_B.bit.LAFS = 0;
   	hw->CTL_B.bit.LSBF = 0; //MSB first data
   	hw->CTL_B.bit.CKRE = 1;
+  	hw->CTL_B.bit.LFS = 1;
+  	hw->CTL_B.bit.FSR = 1;
   	hw->CTL_B.bit.SLEN = wordLength - 1;
+  	hw->CTL_B.bit.DTYPE = 1;
 
   	hw->CTL2_B.reg = 0x03; //share fs and clk
 

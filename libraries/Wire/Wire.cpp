@@ -60,6 +60,7 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
     return 0;
   }
 
+  for(int i_ = 0; i_ < 3000; i_++){ __asm__ volatile("NOP;"); }
   size_t byteRead = 0;
 
   rxBuffer.clear();
@@ -110,12 +111,15 @@ uint8_t TwoWire::endTransmission(bool stopBit)
 {
   transmissionBegun = false ;
 
+  while(hw->MSTRSTAT.bit.BUSBUSY || hw->MSTRSTAT.bit.MPROG);
+
   hw->FIFOCTL.reg = 0;
 
   uint8_t bytesAvailable = txBuffer.available() & 0xFF;
 
   hw->TXDATA8.reg = txBuffer.read_char();
-  hw->MSTRCTL.reg = ((uint32_t)bytesAvailable << 6)| 0x01;
+
+  hw->MSTRCTL.reg = (!stopBit << 5) | ((uint32_t)bytesAvailable << 6)| 0x01;
 
   //send first byte
   while(!hw->ISTAT.bit.TXSERV);
@@ -125,11 +129,15 @@ uint8_t TwoWire::endTransmission(bool stopBit)
   while( txBuffer.available() ){
 	  hw->TXDATA8.reg = txBuffer.read_char();
 
-	  while(!hw->ISTAT.bit.TXSERV);
+	  while(!hw->ISTAT.bit.TXSERV){
+		  if(hw->ISTAT.bit.MCOMP) break;
+	  }
 	  hw->ISTAT.bit.TXSERV = 1;
   }
 
   hw->ISTAT.bit.MCOMP = 1;
+
+  if(stopBit) while(hw->MSTRSTAT.bit.BUSBUSY || hw->MSTRSTAT.bit.MPROG);
 
   //TODO: error codes
 
