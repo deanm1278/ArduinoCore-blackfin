@@ -125,14 +125,22 @@ typedef uint32_t q16;
 #define _F(x) ((int) ((x)*( (1UL<<31) - 1 )))
 #define _F16(x) ((uint32_t) ((x)*( (1<<16) )))
 
-#define FRACMUL(x,y) __builtin_bfin_mult_fr1x32x32(x, _F(y))
+static inline q31 _mult32x32(q31 x, q31 y){
+	q31 ret;
+	__asm__ volatile("%0 = %1 * %2;" : "=d"(ret) : "d"(x), "d"(y));
+	return ret;
+}
+
+#define FRACMUL(x,y) _mult32x32((x),_F(y))
 
 #define PROFILE(name, x) { uint32_t __cycles, __deltaCycles; \
-	__asm__ volatile("%0 = CYCLES;" : "=r"(__cycles)); \
+	uint32_t __mask = noInterrupts(); \
+	__asm__ volatile("%0 = CYCLES;" : "=d"(__cycles)); \
 	x; \
-	__asm__ volatile("%0 = CYCLES;" : "=r"(__deltaCycles)); \
+	__asm__ volatile("%0 = CYCLES;" : "=d"(__deltaCycles)); \
 	Serial.print("["); Serial.print(name); Serial.print("] : "); \
-	Serial.println(__deltaCycles - __cycles); __asm__ volatile("EMUEXCPT;"); }
+	Serial.println(__deltaCycles - __cycles); __asm__ volatile("EMUEXCPT;");\
+	interrupts(__mask); }
 
 typedef struct complex_q31 {
     q31 re;

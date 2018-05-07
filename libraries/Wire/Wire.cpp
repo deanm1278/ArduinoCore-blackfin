@@ -72,11 +72,13 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
   while(byteRead < quantity){
 
 	//TODO: we may want to add some sort of timeout here...
+	uint32_t mask = noInterrupts();
 	while(!hw->ISTAT.bit.RXSERV);
 	rxBuffer.store_char( hw->RXDATA8.reg );
 
 	hw->ISTAT.bit.RXSERV = 1;
 	byteRead++;
+	interrupts(mask);
 
 	if(hw->MSTRSTAT.reg & 0x0C) break;
   }
