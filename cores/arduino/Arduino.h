@@ -121,8 +121,10 @@ void loop( void ) ;
 #define bit(b) (1UL << (b))
 
 typedef int32_t q31;
+typedef int32_t q28;
 typedef uint32_t q16;
 #define _F(x) ((int) ((x)*( (1UL<<31) - 1 )))
+#define _F28(x) ((int) ((x)*( (1UL<<28) - 1 )))
 #define _F16(x) ((uint32_t) ((x)*( (1<<16) )))
 
 static inline q31 _mult32x32(q31 x, q31 y){
