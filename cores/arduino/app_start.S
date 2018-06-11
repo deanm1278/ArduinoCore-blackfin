@@ -107,7 +107,7 @@ L$ivt:	[P0++] = R1;
 	[P0++] = R1;
 
 	//R1 = SYSCFG;
-    R0 = 0x0242;
+    R0 = 0x0342;
     //R1 = R0 | R1;
     SYSCFG = R0;
 
@@ -144,6 +144,13 @@ L$ivt:	[P0++] = R1;
 	R0 = SYSCFG;		// Enable the Cycle counter
 	BITSET(R0,1);
 	SYSCFG = R0;
+
+	//enable branch prediction
+	R0 = SYSCFG;
+	BITSET(R0,8);
+	BITSET(R0,9);
+	SYSCFG = R0;
+	SSYNC;
 
 	// Reinitialise data areas in RAM from ROM, if MemInits
 	// been used.

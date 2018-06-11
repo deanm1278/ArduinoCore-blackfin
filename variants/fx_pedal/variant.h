@@ -30,7 +30,7 @@
 
 #define PERIPH_SPI SPI2
 
-//arduino SPI default is bfin peripheral SPI1
+//arduino SPI default is bfin peripheral SPI2
 #define PIN_SPI_SCK     14
 #define PIN_SPI_MISO    15
 #define PIN_SPI_MOSI    16
@@ -42,13 +42,15 @@
 
 #define PERIPH_SPI1 SPI1
 
-//arduino SPI1 is bfin peripheral SPI2 (confusing but helps compatibility)
 #define PIN_SPI1_SCK     20
 #define PIN_SPI1_MISO    21
 #define PIN_SPI1_MOSI    22
 #define PIN_SPI1_SS      23
 
 #define SS1 PIN_SPI1_SS
+#define PIN_CONTROLS_START PIN_SPI1_MISO
+#define SPI_CONTROLS _SPI1
+#define PIN_CONTROLS_SS SS1
 
 //I2S
 #define PIN_BCLK 10

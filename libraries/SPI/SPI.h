@@ -99,11 +99,12 @@ class SPIClass {
   void setDataMode(uint8_t uc_mode);
   void setClockDivider(uint8_t uc_div);
 
+  Spigroup *_hw;
+
   private:
   void init();
   void config(SPISettings settings);
 
-  Spigroup *_hw;
   uint8_t _uc_pinMiso;
   uint8_t _uc_pinMosi;
   uint8_t _uc_pinSCK;
