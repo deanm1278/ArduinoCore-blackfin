@@ -20,6 +20,7 @@
 #define NUM_PORT 3
 
 #define LED_BUILTIN 	(13ul)
+#define PIN_NEOPIX		(3ul)
 
 //Serial
 #define PIN_SERIAL_RX  		(0ul)
