@@ -24,7 +24,6 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "variant.h"
 
 /**
  * \brief Returns the number of milliseconds since the Arduino board began running the current program.

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _UART_H
+#define _UART_H
 
 #include "HardwareSerial.h"
 #include "bf706_device.h"
@@ -27,7 +28,7 @@ class Uart : public HardwareSerial
 
   private:
     Uartgroup *hw;
-    RingBuffer rxBuffer;
+    RingBuffer<uint8_t> rxBuffer;
 
     uint8_t uc_pinRX;
     uint8_t uc_pinTX;
@@ -38,3 +39,5 @@ class Uart : public HardwareSerial
     SercomParityMode extractParity(uint16_t config);
     */
 };
+
+#endif

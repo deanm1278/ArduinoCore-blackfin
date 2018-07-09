@@ -174,13 +174,13 @@ void SPIClass::setDataMode(uint8_t mode)
         break;
 
     case SPI_MODE1:
-        _hw->CTL.bit.CPOL = 1;
-        _hw->CTL.bit.CPHA = 0;
+        _hw->CTL.bit.CPOL = 0;
+        _hw->CTL.bit.CPHA = 1;
         break;
 
     case SPI_MODE2:
-        _hw->CTL.bit.CPOL = 0;
-        _hw->CTL.bit.CPHA = 1;
+        _hw->CTL.bit.CPOL = 1;
+        _hw->CTL.bit.CPHA = 0;
         break;
 
     case SPI_MODE3:

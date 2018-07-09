@@ -21,13 +21,15 @@
 
 #include <Arduino.h>
 
-RingBuffer::RingBuffer( void )
+template <class T>
+RingBuffer<T>::RingBuffer( void )
 {
-    memset( _aucBuffer, 0, SERIAL_BUFFER_SIZE ) ;
+    memset( _aucBuffer, 0, SERIAL_BUFFER_SIZE*sizeof(T)) ;
     clear();
 }
 
-void RingBuffer::store_char( uint8_t c )
+template <class T>
+void RingBuffer<T>::store_char( uint8_t c )
 {
   uint32_t mask = noInterrupts();
   int i = nextIndex(_iHead);
@@ -44,28 +46,41 @@ void RingBuffer::store_char( uint8_t c )
   interrupts(mask);
 }
 
-void RingBuffer::clear()
+template <class T>
+void RingBuffer<T>::store( T c )
+{
+  uint32_t mask = noInterrupts();
+  int i = nextIndex(_iHead);
+  _aucBuffer[_iHead] = c ;
+  _iHead = i ;
+  interrupts(mask);
+}
+
+template <class T>
+void RingBuffer<T>::clear()
 {
 	_iHead = 0;
 	_iTail = 0;
 }
 
-int RingBuffer::read_char()
+template <class T>
+int RingBuffer<T>::read_char()
 {
 	uint32_t mask = noInterrupts();
 	if(_iTail == _iHead)
 		return -1;
 
-	uint8_t value = _aucBuffer[_iTail];
+	T value = _aucBuffer[_iTail];
 	_iTail = nextIndex(_iTail);
 
 	interrupts(mask);
 	return value;
 }
 
-int RingBuffer::available()
+template <class T>
+int RingBuffer<T>::available()
 {
-	int delta = _iHead - _iTail;
+	int delta = (_iHead - _iTail);
 
 	if(delta < 0)
 		return SERIAL_BUFFER_SIZE + delta;
@@ -73,7 +88,8 @@ int RingBuffer::available()
 		return delta;
 }
 
-int RingBuffer::peek()
+template <class T>
+int RingBuffer<T>::peek()
 {
 	if(_iTail == _iHead)
 		return -1;
@@ -81,12 +97,27 @@ int RingBuffer::peek()
 	return _aucBuffer[_iTail];
 }
 
-int RingBuffer::nextIndex(int index)
+template <class T>
+int RingBuffer<T>::peekHead(int offset)
 {
-	return (uint32_t)(index + 1) % SERIAL_BUFFER_SIZE;
+	if(available() < offset)
+		return -1;
+
+	int ix = _iHead - (offset + 1);
+	if(ix < 0)
+		return _aucBuffer[SERIAL_BUFFER_SIZE + ix];
+
+	return _aucBuffer[ix];
 }
 
-bool RingBuffer::isFull()
+template <class T>
+int RingBuffer<T>::nextIndex(int index)
+{
+	return (uint32_t)(index + 1) % (SERIAL_BUFFER_SIZE);
+}
+
+template <class T>
+bool RingBuffer<T>::isFull()
 {
 	return (nextIndex(_iHead) == _iTail);
 }
