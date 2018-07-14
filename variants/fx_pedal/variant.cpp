@@ -18,8 +18,8 @@ const PinDescription g_APinDescription[]=
     { EPORT_C, 5, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE }, // AFS
     { EPORT_C, 6, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE }, // BD0
 
-    { NOT_A_PORT, 0, PIO_NOT_A_PIN, PIN_ATTR_NONE, NOT_ON_TIMER, EXTERNAL_INT_NONE },
-    { NOT_A_PORT, 0, PIO_NOT_A_PIN, PIN_ATTR_NONE, NOT_ON_TIMER, EXTERNAL_INT_NONE },
+    { EPORT_B, 8, PIO_MUX_0, PIN_ATTR_DIGITAL, NOT_ON_TIMER, EXTERNAL_INT_NONE }, //UART0_TX
+    { EPORT_B, 9, PIO_MUX_0, PIN_ATTR_DIGITAL, NOT_ON_TIMER, EXTERNAL_INT_NONE }, //UART0_RX
 
     { EPORT_C, 8, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE }, // AD0
     { EPORT_C, 9, PIO_MUX_0, (PIN_ATTR_DIGITAL), NOT_ON_TIMER, EXTERNAL_INT_NONE }, // ACLK
@@ -49,7 +49,7 @@ __IO Dmagroup *DMA[DMA_NUM] = DMA_INSTS;
 __IO Sportgroup *SPORT[SPORT_NUM] = SPORT_INSTS;
 
 Uart Serial( UART1, PIN_SERIAL_RX, PIN_SERIAL_TX ) ;
-//Uart Serial1( UART0, PIN_SERIAL1_RX, PIN_SERIAL1_TX ) ;
+Uart Serial1( UART0, PIN_SERIAL1_RX, PIN_SERIAL1_TX ) ;
 
 void initVariant() {
   //set clocks
@@ -64,12 +64,10 @@ void initVariant() {
 
 extern "C" {
 
-#if 0
 int UART0_STAT_Handler( int IQR_NUM ){
   Serial1.IrqHandler();
   return IQR_NUM;
 }
-#endif
 
 int UART1_STAT_Handler( int IQR_NUM ){
   Serial.IrqHandler();
