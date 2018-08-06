@@ -1,10 +1,10 @@
 # ArduinoCore-blackfin
-arduino core for blackfin
+
+This is an Arduino core for BF70x Blackfin+ DSP chips.
 
 ![Alt text](dsp_feather.JPG)
 
-depends on the gnu toolchain modified for blackfin plus cpu:
-https://github.com/deanm1278/blackfin-plus-gnu
-
-Header files are not yet included in the repo.
-don't try to use this just yet
+## Dependencies
+This code depends on:
+* [GNU toolchain for blackfin+](https://github.com/deanm1278/blackfin-plus-gnu)
+* [BF706 header files](https://github.com/deanm1278/bfin-CMSIS)
