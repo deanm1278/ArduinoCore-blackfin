@@ -148,7 +148,7 @@ tools.openocd.bootloader.pattern="{path}/{cmd}" {bootloader.verbose} -s "{path}/
 # OpenOCD sketch upload into ram
 #
 
-tools.openocd-ram.path=C:\cygwin64\bfin-gnu-new\buildscript\bfin-elf-win\
+tools.openocd-ram.path={runtime.platform.path}/toolchain/
 tools.openocd-ram.cmd=bin/openocd
 tools.openocd-ram.cmd.windows=bin/openocd.exe
 
