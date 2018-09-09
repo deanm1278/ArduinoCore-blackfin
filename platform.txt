@@ -105,7 +105,7 @@ recipe.size.regex=\.text\s+([0-9]+).*
 #
 # BOSSA
 #
-tools.bossac.path={runtime.tools.bossac-1.7.0.path}
+tools.bossac.path={runtime.platform.path}/tools/
 tools.bossac.cmd=bossac
 tools.bossac.cmd.windows=bossac.exe
 #tools.bossac.cmd.linux=bossac_linux
@@ -113,7 +113,7 @@ tools.bossac.cmd.windows=bossac.exe
 
 tools.bossac.upload.params.verbose=-i -d
 tools.bossac.upload.params.quiet=
-tools.bossac.upload.pattern="{path}/{cmd}" {upload.verbose} --port={serial.port.file} -U {upload.native_usb} -i -e -w "{build.path}/{build.project_name}.ldr" -R
+tools.bossac.upload.pattern="{path}/{cmd}" {upload.verbose} --port={serial.port.file} -U -i --offset={upload.offset} --maxsize={upload.maximum_size} -e -w "{build.path}/{build.project_name}.ldr" -R
 
 tools.bossac_remote.upload.pattern=/usr/bin/run-bossac {upload.verbose} --port=ttyATH0 -U {upload.native_usb} -e -w /tmp/sketch.ldr -R
 
