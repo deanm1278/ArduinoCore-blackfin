@@ -6,7 +6,7 @@
  */
 
 
-#include "Timer.h"
+#include "timer.h"
 #include "wiring_private.h"
 
 static uint16_t usedTimers = 0;

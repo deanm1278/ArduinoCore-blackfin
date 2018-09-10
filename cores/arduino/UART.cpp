@@ -1,4 +1,4 @@
-#include "Uart.h"
+#include "UART.h"
 #include "Arduino.h"
 #include "wiring_private.h"
 
@@ -16,6 +16,7 @@ void Uart::begin(unsigned long baudrate)
 
 void Uart::begin(unsigned long baudrate, uint16_t config)
 {
+  (void) config;
   //TODO: other configs
   pinPeripheral(uc_pinRX, g_APinDescription[uc_pinRX].ulPinType);
   pinPeripheral(uc_pinTX, g_APinDescription[uc_pinTX].ulPinType);

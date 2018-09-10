@@ -4,12 +4,9 @@
 /* Default empty handler */
 int Dummy_Handler(int IQR_NUM)
 {
-	for(int j = 0; j < 5; j++){
-      PORTB->DATA_SET.bit.PX4 = 1;
-      for(unsigned long i=0; i<1000000UL; i++) asm("NOP;");
-      PORTB->DATA_CLR.bit.PX4 = 1;
-      for(unsigned long i=0; i<10000000UL; i++) asm("NOP;");
-    }
+	(void)IQR_NUM;
+	__asm__ volatile("EMUEXCPT;");
+	for(;;);
 }
 
 int Reserved1_Handler			( int );
