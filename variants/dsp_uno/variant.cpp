@@ -58,8 +58,8 @@ void initVariant() {
 
   CGU0->PLLCTL.bit.PLLBPCL = 1;
   while( (CGU0->STAT.reg & 0xF) != 0x05 ); //wait
-  CGU0->DIV.reg = 0x03062643;
-  CGU0->CTL.reg = 0x00001A00;
+  CGU0->DIV.reg = 0x03042442;
+  CGU0->CTL.reg = 0x00002000;
 
   while(CGU0->STAT.bit.PLLBP || CGU0->STAT.bit.CLKSALGN || (!CGU0->STAT.bit.PLOCK)); //wait for alignment and lock
 }
