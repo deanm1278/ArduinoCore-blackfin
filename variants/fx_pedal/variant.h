@@ -71,7 +71,7 @@
 #include "WVariant.h"
 
 #ifdef __cplusplus
-#include "Uart.h"
+#include "UART.h"
 #endif // __cplusplus
 
 #ifdef __cplusplus
