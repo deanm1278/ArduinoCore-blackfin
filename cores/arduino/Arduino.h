@@ -135,6 +135,22 @@ static inline q31 _mult32x32(q31 x, q31 y){
 	return ret;
 }
 
+static inline q16 _mult16x16(q16 x, q16 y){
+	q16 ret;
+	__asm__ volatile("(R5:4) = ((A1:0) = %1 * %2) (IU);\n"
+					 "%0 = PACK(R5.L, R4.H);\n"
+					: "=d"(ret) : "d"(x), "d"(y) : "R5", "R4");
+	return ret;
+}
+
+static inline q31 _mult32x16(q31 x, q16 y){
+	q16 ret;
+	__asm__ volatile("(R5:4) = ((A1:0) = %1 * %2) (IU);\n"
+					 "%0 = PACK(R5.L, R4.H);\n"
+					: "=d"(ret) : "d"(x), "d"(y) : "R5", "R4");
+	return ret;
+}
+
 #define FRACMUL(x,y) _mult32x32((x),_F(y))
 
 #define PROFILE(name, x) { uint32_t __cycles, __deltaCycles; \
@@ -153,6 +169,8 @@ typedef struct complex_q31 {
 
 #define L2DATA __attribute__ ((section(".l2")))
 #define RAMB __attribute__ ((section(".data2")))
+
+#define __BKPT() __asm__ volatile("EMUEXCPT;")
 
 /*
 #if (ARDUINO_SAMD_VARIANT_COMPLIANCE >= 10606)
