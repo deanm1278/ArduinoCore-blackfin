@@ -167,6 +167,11 @@ typedef struct complex_q31 {
     q31 im;
 } complex_q31;
 
+typedef struct complex_q15 {
+    q15 re;
+    q15 im;
+} complex_q15;
+
 #define L2DATA __attribute__ ((section(".l2")))
 #define RAMB __attribute__ ((section(".data2")))
 
