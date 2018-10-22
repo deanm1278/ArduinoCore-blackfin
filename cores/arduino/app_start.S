@@ -59,6 +59,11 @@ __start:
 	P0 = REG_RCU0_SVECT0;
 	[P0] = R0;
 
+	// TODO: cache gets confused when we fetch from L2 ROM currently
+	P0 = REG_L1IM_ICTL;
+	R0 = 0;
+	[P0] = R0;
+
 	// Zap loop counters to zero, to make sure that
 	// hw loops are disabled - it could be really baffling
 	// if the counters and bottom regs are set, and we happen
@@ -106,10 +111,10 @@ L$ivt:	[P0++] = R1;
 	R1.H = __systick_dispatch
 	[P0++] = R1;
 
-	//R1 = SYSCFG;
-    R0 = 0x0342;
-    //R1 = R0 | R1;
-    SYSCFG = R0;
+	R1 = SYSCFG;
+    R0 = 0x0042;
+    R1 = R0 | R1;
+    SYSCFG = R1;
 
 	// Initialise the stack.
 	// Note: this points just past the end of the section.
@@ -255,6 +260,11 @@ __unknown_exception_occurred:
 	//
 	// Since theres nothing we can do, we just loop here
 	// at what we hope is a suitably informative label.
+	.extern _Hardfault_Handler;
+	.type _Hardfault_Handler,STT_FUNC;
+	R0 = SEQSTAT;
+	CALL.X _Hardfault_Handler;
+
 	EMUEXCPT;
 	IDLE;
 	CSYNC;

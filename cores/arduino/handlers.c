@@ -5,6 +5,21 @@
 int Dummy_Handler(int IQR_NUM)
 {
 	(void)IQR_NUM;
+	while(!UART1->STAT.bit.THRE);
+	UART1->THR.reg = 0x55;
+
+	__asm__ volatile("EMUEXCPT;");
+	for(;;);
+}
+
+int Hardfault_Handler(uint32_t seqstat)
+{
+	uint8_t *b = (uint8_t *)&seqstat;
+	for(int i=0; i<4; i++){
+		while(!UART1->STAT.bit.THRE);
+		UART1->THR.reg = *b++;
+	}
+
 	__asm__ volatile("EMUEXCPT;");
 	for(;;);
 }
